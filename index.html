@@ -1302,9 +1302,20 @@
         <span class="brand-sep">/</span>
         <span class="brand-sub">Smart NLP Text Analyzer</span>
       </div>
-      <div class="header-attribution">
-        Created by <strong>Dhiraj Jadhav</strong>
-      </div>
+      <a class="lx-credit" id="lxCredit"
+         href="https://dhiraj-portfolio-psi.vercel.app/"
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Created by Dhiraj Jadhav. Opens portfolio website in a new tab">
+        <svg class="lx-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M3 12h18"/>
+          <path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/>
+        </svg>
+        <span class="lx-txt">Created by <b>Dhiraj Jadhav</b></span>
+        <svg class="lx-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 17 17 7M8 7h9v9"/>
+        </svg>
+      </a>
     </div>
   </header>
 
@@ -2830,72 +2841,118 @@
     });
   </script>
 
-<!-- ============ LEXINEST CREDIT: one link, every page ============ -->
-<a class="lx-credit" id="lxCredit"
-   href="https://dhiraj-portfolio-psi.vercel.app/"
-   target="_blank" rel="noopener noreferrer"
-   aria-label="Created by Dhiraj Jadhav. Opens portfolio website in a new tab">
-  <svg class="lx-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="9"/>
-    <path d="M3 12h18"/>
-    <path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/>
-  </svg>
-  <span class="lx-txt">Created by <b>Dhiraj Jadhav</b></span>
-  <svg class="lx-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M7 17 17 7M8 7h9v9"/>
-  </svg>
-</a>
-
 <style>
-.lx-credit{
-  position:fixed; z-index:60;
-  display:inline-flex; align-items:center; gap:8px;
-  min-height:44px; padding:0 14px;
-  background:#1F4D3A; color:#F6F4EE; text-decoration:none;
-  border:1px solid #D9A441; border-radius:8px;
-  font:500 13px Inter,system-ui,sans-serif; letter-spacing:.01em;
-  box-shadow:0 1px 2px rgba(0,0,0,.08);
-  animation:lxIn .6s ease both, lxPulse 3.2s ease-out 1.5s infinite;
-  transition:background .2s, transform .2s;
+.lx-credit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: 500 13px Inter, system-ui, sans-serif;
+  letter-spacing: .01em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
-.lx-credit:hover{background:#17392B; transform:translateY(-1px)}
-.lx-credit:active{transform:scale(.98)}
-.lx-credit:focus-visible{outline:2px solid #D9A441; outline-offset:3px}
-.lx-in{width:16px; height:16px; color:#D9A441; flex:none}
-.lx-go{width:14px; height:14px; color:#D9A441; flex:none; transition:transform .2s}
-.lx-credit:hover .lx-go{transform:translate(2px,-2px)}
-.lx-txt b{
-  font-weight:700;
-  background:linear-gradient(110deg,#F6F4EE 0%,#F6F4EE 40%,#F3D58A 50%,#D9A441 55%,#F6F4EE 65%,#F6F4EE 100%);
-  background-size:260% 100%; background-position:120% 0;
-  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-  animation:lxGlint 2.8s ease-in-out 1s infinite;
+.lx-credit:hover {
+  background: var(--bg);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(31, 77, 58, 0.08);
 }
-@keyframes lxGlint{0%{background-position:120% 0} 60%,100%{background-position:-20% 0}}
-@keyframes lxPulse{0%{box-shadow:0 0 0 0 rgba(217,164,65,.45)} 70%,100%{box-shadow:0 0 0 10px rgba(217,164,65,0)}}
-@keyframes lxIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+.lx-credit:active {
+  transform: scale(.98);
+}
+.lx-credit:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.lx-in {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+  flex: none;
+}
+.lx-go {
+  width: 13px;
+  height: 13px;
+  color: var(--accent);
+  flex: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.lx-credit:hover .lx-go {
+  color: var(--primary);
+  transform: translate(2px, -2px);
+}
+.lx-txt {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.lx-txt b {
+  font-weight: 600;
+  color: var(--primary);
+  background: linear-gradient(110deg, var(--primary) 0%, var(--primary) 40%, var(--accent) 52%, var(--primary) 64%, var(--primary) 100%);
+  background-size: 260% 100%;
+  background-position: 120% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: lxGlint 3s ease-in-out 1s infinite;
+}
+@keyframes lxGlint {
+  0% { background-position: 120% 0; }
+  60%, 100% { background-position: -20% 0; }
+}
 
-/* Desktop: sits in the header's right side */
-@media (min-width:900px){
-  .lx-credit{top:10px; right:24px}
-  .header-attribution{display:none}
-}
-/* Mobile: centered pill at the bottom, above the home bar */
-@media (max-width:899px){
-  .lx-credit{
-    left:50%; bottom:calc(14px + env(safe-area-inset-bottom));
-    transform:translateX(-50%); animation:lxInM .6s ease both, lxPulse 3.2s ease-out 1.5s infinite;
+/* Desktop: sits naturally inside the sticky header on the right */
+@media (min-width: 900px) {
+  .lx-credit {
+    position: static;
+    margin-left: auto;
   }
-  .lx-credit:hover{transform:translateX(-50%) translateY(-1px)}
-  .lx-credit:active{transform:translateX(-50%) scale(.98)}
-  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
-  body.sheet-open .lx-credit{display:none}
 }
-@keyframes lxInM{from{opacity:0; transform:translate(-50%,8px)} to{opacity:1; transform:translate(-50%,0)}}
 
-@media (prefers-reduced-motion:reduce){
-  .lx-credit,.lx-txt b{animation:none}
-  .lx-txt b{background-position:50% 0}
+/* Mobile: centered floating pill at the bottom across all views */
+@media (max-width: 899px) {
+  .lx-credit {
+    position: fixed;
+    z-index: 95;
+    left: 50%;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    animation: lxInM .5s ease both;
+  }
+  .lx-credit:hover {
+    transform: translateX(-50%) translateY(-1px);
+  }
+  .lx-credit:active {
+    transform: translateX(-50%) scale(.98);
+  }
+  body {
+    padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  }
+  body.sheet-open .lx-credit {
+    display: none !important;
+  }
+}
+@keyframes lxInM {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lx-credit, .lx-txt b {
+    animation: none !important;
+  }
+  .lx-txt b {
+    background-position: 50% 0;
+  }
 }
 </style>
 </body>
