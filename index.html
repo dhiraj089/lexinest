@@ -586,6 +586,124 @@
 </head>
 <body>
 
+<!-- ============ LEXINEST INTRO: paste right after <body> ============ -->
+<div id="intro" role="dialog" aria-label="LexiNest introduction">
+  <button id="introSkip" type="button">Skip intro</button>
+
+  <div class="in-stage">
+    <svg class="in-logo" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="10" y="6" width="28" height="36" rx="4" pathLength="1"/>
+      <path d="M17 16h14M17 23h14M17 30h8" pathLength="1"/>
+    </svg>
+
+    <h1 class="in-title">LexiNest</h1>
+    <p class="in-sub">Smart NLP Text Analyzer &amp; Interactive Educational Lab</p>
+
+    <div class="in-sentence" id="inSentence" aria-hidden="true"></div>
+    <p class="in-status" id="inStatus" aria-live="polite">Reading text…</p>
+  </div>
+
+  <div class="in-bar"><span></span></div>
+</div>
+
+<style>
+#intro{
+  position:fixed; inset:0; z-index:9999; background:#F6F4EE; color:#1C1F1D;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:24px; transition:opacity .6s ease, visibility .6s ease;
+}
+#intro.hide{opacity:0; visibility:hidden; pointer-events:none}
+#introSkip{
+  position:absolute; top:max(16px, env(safe-area-inset-top)); right:16px;
+  background:none; border:1px solid #E4DFD3; border-radius:8px; padding:8px 14px;
+  font:500 14px Inter,system-ui,sans-serif; color:#6B6F69; cursor:pointer; min-height:40px;
+}
+#introSkip:hover{color:#1F4D3A; border-color:#1F4D3A}
+.in-stage{display:flex; flex-direction:column; align-items:center; text-align:center; max-width:720px}
+.in-logo{width:56px; height:56px; color:#1F4D3A}
+.in-logo rect,.in-logo path{stroke-dasharray:1; stroke-dashoffset:1; animation:inDraw 1.4s ease forwards}
+.in-logo path{animation-delay:.6s}
+@keyframes inDraw{to{stroke-dashoffset:0}}
+.in-title{
+  font:600 clamp(36px,8vw,56px) Fraunces,Georgia,serif; margin:16px 0 4px;
+  opacity:0; transform:translateY(8px); animation:inUp .8s ease 1.2s forwards;
+}
+.in-sub{
+  font:400 clamp(13px,3.4vw,16px) Inter,system-ui,sans-serif; color:#6B6F69; margin:0;
+  opacity:0; animation:inUp .8s ease 1.7s forwards;
+}
+@keyframes inUp{to{opacity:1; transform:none}}
+
+.in-sentence{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:10px 6px;
+  margin-top:40px; min-height:92px;
+}
+.in-w{display:flex; flex-direction:column; align-items:center; gap:6px; opacity:0; transform:translateY(6px);
+  transition:opacity .4s ease, transform .4s ease}
+.in-w.on{opacity:1; transform:none}
+.in-w b{
+  font:500 clamp(13px,3.6vw,17px) 'JetBrains Mono',ui-monospace,monospace; font-weight:500;
+  padding:4px 8px; border:1px solid transparent; border-radius:6px; transition:border-color .5s, background .5s;
+}
+.in-w.tok b{border-color:#E4DFD3; background:#fff}
+.in-w i{
+  font:500 10px 'JetBrains Mono',ui-monospace,monospace; font-style:normal; letter-spacing:.04em;
+  padding:2px 6px; border-radius:4px; opacity:0; transition:opacity .5s;
+}
+.in-w.tag i{opacity:1}
+.in-status{
+  margin-top:28px; font:500 13px 'JetBrains Mono',ui-monospace,monospace;
+  color:#1F4D3A; letter-spacing:.06em; text-transform:uppercase; min-height:20px;
+}
+.in-bar{position:absolute; left:0; right:0; bottom:0; height:3px; background:#E4DFD3}
+.in-bar span{display:block; height:100%; width:0; background:#1F4D3A; animation:inBar 10s linear forwards}
+@keyframes inBar{to{width:100%}}
+
+@media (prefers-reduced-motion:reduce){
+  .in-logo rect,.in-logo path{animation-duration:.01s}
+  .in-w,.in-title,.in-sub{transition:none; animation-duration:.01s}
+}
+</style>
+
+<script>
+(function(){
+  var intro=document.getElementById('intro'); if(!intro) return;
+  document.body.style.overflow='hidden';
+
+  var words=[['The','DT','#3E7C6B'],['children','NNS','#B5654A'],['were','VBD','#5B6C9D'],
+    ['running','VBG','#8A7A3C'],['quickly','RB','#9A5B7E'],['to','TO','#3E7C6B'],
+    ['the','DT','#3E7C6B'],['bank','NN','#B5654A'],['near','IN','#5B6C9D'],
+    ['the','DT','#3E7C6B'],['river','NN','#B5654A']];
+  var box=document.getElementById('inSentence'), status=document.getElementById('inStatus');
+  var timers=[], done=false;
+
+  var els=words.map(function(w){
+    var d=document.createElement('span'); d.className='in-w';
+    d.innerHTML='<b>'+w[0]+'</b><i style="color:'+w[2]+';background:'+w[2]+'1F">'+w[1]+'</i>';
+    box.appendChild(d); return d;
+  });
+  function at(ms,fn){timers.push(setTimeout(fn,ms))}
+
+  // Timeline (total 10s)
+  els.forEach(function(el,i){ at(2600+i*160,function(){el.classList.add('on')}) });          // words appear
+  at(4800,function(){status.textContent='Tokenizing…'; els.forEach(function(e,i){setTimeout(function(){e.classList.add('tok')},i*70)})});
+  at(6600,function(){status.textContent='Tagging parts of speech…'; els.forEach(function(e,i){setTimeout(function(){e.classList.add('tag')},i*70)})});
+  at(8400,function(){status.textContent='Preparing your lab…'});
+  at(9400,finish);
+
+  function finish(){
+    if(done) return; done=true;
+    timers.forEach(clearTimeout);
+    intro.classList.add('hide');
+    document.body.style.overflow='';
+    setTimeout(function(){intro.remove()},700);
+    document.dispatchEvent(new Event('lexinest:ready'));   // optional hook for your app
+  }
+  document.getElementById('introSkip').addEventListener('click',finish);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') finish(); });
+})();
+</script>
+
   <!-- Header (64px) -->
   <header>
     <div class="header-inner">
