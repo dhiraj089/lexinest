@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>LexiNest – Smart NLP Text Analyzer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#FFF6E5;--card:#FFFDF7;--or:#FF9A3C;--lo:#FFD9A8;--tx:#4a2c0c;--mut:#8a6a45;--bd:#F3CFA0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1d10;--card:#35251a;--lo:#5a3a1a;--tx:#ffe9cc;--mut:#d3b088;--bd:#6b4726}}
+:root[data-theme="dark"]{--bg:#2a1d10;--card:#35251a;--lo:#5a3a1a;--tx:#ffe9cc;--mut:#d3b088;--bd:#6b4726}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:linear-gradient(135deg,#FFB767,#FF9A3C);color:#3b1f04;padding:22px 16px;text-align:center}
+header h1{margin:0;font-size:26px}header p{margin:4px 0 0;font-size:14px}
+main{max-width:980px;margin:auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
+textarea,input,select{width:100%;padding:9px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:90px}
+button{background:var(--or);color:#3b1f04;border:0;border-radius:20px;padding:8px 16px;margin:4px 4px 0 0;font-weight:600;cursor:pointer}
+button:hover{filter:brightness(1.08)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
+.tab{background:var(--lo);color:var(--tx);white-space:nowrap}.tab.on{background:var(--or);color:#3b1f04}
+.sec{display:none}.sec.on{display:block}
+.info{background:var(--lo);border-radius:10px;padding:10px;font-size:13.5px;margin-bottom:10px}
+.out{margin-top:10px;overflow-x:auto}
+.chip{display:inline-block;background:var(--lo);border:1px solid var(--bd);border-radius:8px;padding:2px 8px;margin:2px;font-size:13.5px}
+.chip small{color:var(--mut);margin-left:4px;font-weight:700}
+table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--bd);padding:5px 8px;text-align:left;font-size:14px}th{background:var(--lo)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:120px}.row button{flex:0}
+#cloud{text-align:center;line-height:1.3;padding:10px}#cloud span{display:inline-block;margin:3px 8px;font-weight:700}
+.best{background:var(--lo)}
+</style></head><body>
+<header><h1>🪺 LexiNest</h1><p>Smart NLP Text Analyzer — tokenize, tag, extract, visualise &amp; disambiguate text</p></header>
+<main>
+<div class="card"><b>Input text</b> (used by every module)
+<textarea id="txt">Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India.</textarea>
+<button onclick="sample()">🔄 Load another sample</button></div>
+<div class="tabs" id="tabs"></div>
+
+<div class="sec card" id="s0"><h3>1 · Text Processing</h3>
+<div class="info"><b>Why:</b> Raw text is messy. Tokenization splits it into units, filtration removes noise, and script validation confirms the writing system (vital for multilingual apps, spam &amp; language filters).<br><b>How:</b> Regex splits text into words/sentences; filters drop punctuation &amp; digits; Unicode script properties count characters per script.</div>
+<button onclick="tokenize()">Tokenize</button><button onclick="filt()">Filter (clean)</button>
+<div class="row" style="margin-top:6px"><select id="scr"><option>Latin</option><option>Devanagari</option><option>Arabic</option><option>Cyrillic</option><option>Han</option></select><button onclick="validate()">Validate Script</button></div><div class="out" id="o0"></div></div>
+
+<div class="sec card" id="s1"><h3>2 · Stop Words, Stemming &amp; Lemmatization</h3>
+<div class="info"><b>Why:</b> Search engines and classifiers work better after removing filler words and reducing words to a base form (“running”, “ran” → “run”).<br><b>How:</b> A stop-word list is filtered out; the stemmer chops suffixes by rules (fast, may give non-words like “studi”); the lemmatizer uses irregular-form lookup + rules to return real dictionary words.</div>
+<button onclick="stops()">Remove Stop Words</button><button onclick="stems()">Stemming</button><button onclick="lemmas()">Lemmatization</button><div class="out" id="o1"></div></div>
+
+<div class="sec card" id="s2"><h3>3 · Bag of Words &amp; N-Grams</h3>
+<div class="info"><b>Why:</b> Models need numbers. BoW counts words for classification/spam detection; N-grams keep word order for autocomplete, plagiarism and language models.<br><b>How:</b> BoW = frequency of each unique word. N-gram = sliding window of N consecutive tokens.</div>
+<div class="row"><button onclick="bow()">Show BoW</button><select id="n"><option value="2">Bigram (2)</option><option value="1">Unigram (1)</option><option value="3">Trigram (3)</option><option value="4">4-gram</option></select><button onclick="ngram()">Show N-Gram</button></div><div class="out" id="o2"></div></div>
+
+<div class="sec card" id="s3"><h3>4 · Part-of-Speech Tagging</h3>
+<div class="info"><b>Why:</b> Knowing noun/verb/adjective helps grammar checkers, question answering and information extraction.<br><b>How:</b> Penn-Treebank style tags are assigned using a word lexicon (the, is, and…) plus suffix and capitalization rules (-ing → VBG, -ly → RB).</div>
+<button onclick="pos()">Tag Text</button><div class="out" id="o3"></div></div>
+
+<div class="sec card" id="s4"><h3>5 · Named Entity Recognition</h3>
+<div class="info"><b>Why:</b> Pulls out people, places, organizations, dates and money — used in news analysis, resume parsing and chatbots.<br><b>How:</b> Capitalized-word chunks are classified using gazetteers (known places/orgs) and title cues (Dr., Mr.); regex patterns catch dates, money, percentages and emails.</div>
+<button onclick="ner()">Extract Entities</button><div class="out" id="o4"></div></div>
+
+<div class="sec card" id="s5"><h3>6 · Exploratory Data Analysis (Word Cloud)</h3>
+<div class="info"><b>Why:</b> A quick visual of what a document is about — used in survey, review and social-media analysis.<br><b>How:</b> Stop words are removed, words counted, and font size is scaled by frequency.</div>
+<button onclick="cloud()">Generate Word Cloud</button><div class="out" id="o5"></div></div>
+
+<div class="sec card" id="s6"><h3>7 · WordNet (Synonyms, Antonyms) &amp; Brown Corpus</h3>
+<div class="info"><b>Why:</b> Lexical databases power search-query expansion, thesaurus tools and semantic similarity. A corpus gives real-usage statistics.<br><b>How:</b> A mini WordNet-style dictionary returns synonym sets (synsets) and antonyms; a mini Brown-style corpus (news, fiction, science) gives word frequency &amp; concordance lines.</div>
+<div class="row"><input id="w" value="good" placeholder="Enter a word"><button onclick="wn('syn')">Synonyms</button><button onclick="wn('ant')">Antonyms</button><button onclick="brown()">Brown Corpus</button></div><div class="out" id="o6"></div></div>
+
+<div class="sec card" id="s7"><h3>8 · Word Sense Disambiguation (Lesk)</h3>
+<div class="info"><b>Why:</b> “bank” can mean money or river. WSD picks the right meaning for translation, search and voice assistants.<br><b>How:</b> Simplified Lesk counts overlapping words between the sentence context and each sense's definition; the sense with the highest overlap wins.</div>
+<input id="ls" value="I deposited money at the bank to open a savings account"><div class="row" style="margin-top:6px"><select id="lw"></select><button onclick="lesk()">Disambiguate</button></div><div class="out" id="o7"></div></div>
+</main>
+<script>
+const $=s=>document.getElementById(s),T=()=>$('txt').value,E=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const SW=new Set("a an the and or but if of at by for with to from in on is are was were be been am it its he she they we you i me my his her their our this that these those as so than then there here not no do does did have has had will would can could should may might into over near about very just also which who what when".split(" "));
+const words=t=>t.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g)||[];
+const toks=t=>t.match(/[A-Za-z]+(?:'[a-z]+)?|\d+(?:[.,]\d+)*|[^\sA-Za-z\d]/g)||[];
+const chip=(a,b)=>`<span class="chip">${E(a)}${b!=null?`<small>${E(b)}</small>`:''}</span>`;
+const tbl=(h,r)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr${x.cls?` class="${x.cls}"`:''}>${x.c.map(y=>`<td>${y}</td>`).join('')}</tr>`).join('')}</table>`;
+const out=(i,h)=>$('o'+i).innerHTML=h;
+const names=["Text Processing","Stop/Stem/Lemma","BoW & N-Gram","POS Tagging","NER","Word Cloud","WordNet & Brown","Lesk WSD"];
+names.forEach((n,i)=>{const b=document.createElement('button');b.className='tab';b.textContent=(i+1)+'. '+n;b.onclick=()=>show(i);$('tabs').appendChild(b)});
+function show(i){document.querySelectorAll('.sec').forEach((s,j)=>s.classList.toggle('on',i==j));document.querySelectorAll('.tab').forEach((s,j)=>s.classList.toggle('on',i==j))}show(0);
+const samples=["Prof. Anita Desai visited Microsoft in London on 2 June 2025 and earned €5000. The bat flew over the river bank at night. Sales grew 12% in Delhi!","Elon Musk announced that Tesla will open a factory in India. The players were playing cricket happily, and the mouse ran quickly across the floor."];let si=0;
+function sample(){$('txt').value=samples[si++%2]}
+// 1
+function tokenize(){const t=T(),sents=t.split(/(?<=[.!?])\s+(?=[A-Z])/),w=toks(t);out(0,`<b>${w.length} tokens · ${sents.length} sentences</b><br>${w.map(x=>chip(x)).join('')}<hr>${sents.map((s,i)=>`<div>${i+1}. ${E(s)}</div>`).join('')}`)}
+function filt(){const t=T(),w=toks(t),k=w.filter(x=>/^[A-Za-z]/.test(x)).map(x=>x.toLowerCase());out(0,`<b>Removed:</b> ${w.length-k.length} punctuation/number tokens; lower-cased the rest.<br>${k.map(x=>chip(x)).join('')}`)}
+function validate(){const s=$('scr').value,re=new RegExp(`\\p{Script=${s}}`,'u'),t=T();let cnt={},tot=0;for(const c of t){if(/[\s\d\p{P}\p{S}]/u.test(c))continue;tot++;for(const sc of['Latin','Devanagari','Arabic','Cyrillic','Han'])if(new RegExp(`\\p{Script=${sc}}`,'u').test(c)){cnt[sc]=(cnt[sc]||0)+1;break}}
+const ok=(cnt[s]||0)===tot&&tot>0;out(0,`<b style="color:${ok?'#2f7d32':'#c0392b'}">${ok?'✅ Valid':'❌ Not valid'} ${s} text</b><br>`+tbl(['Script','Letters'],Object.entries(cnt).map(([a,b])=>({c:[a,b+' ('+Math.round(b/tot*100)+'%)']}))))}
+// 2
+function stem(w){if(w.length<4)return w;const R=[['sses','ss'],['ies','i'],['ational','ate'],['ization','ize'],['fulness','ful'],['ousness','ous'],['ing',''],['edly',''],['ed',''],['ly',''],['ment',''],['ness',''],['ers','er'],['es',''],['s','']];
+for(const[s,r]of R){if(w.endsWith(s)&&!(s=='s'&&/ss$/.test(w))){let b=w.slice(0,-s.length)+r;if(b.length<3||!/[aeiouy]/.test(b))continue;if((s=='ing'||s=='ed')&&/([^aeiouls])\1$/.test(b))b=b.slice(0,-1);w=b;break}}
+if(w.length>4&&w.endsWith('e'))w=w.slice(0,-1);if(w.length>2&&w.endsWith('y'))w=w.slice(0,-1)+'i';return w}
+const IRR={went:'go',gone:'go',was:'be',were:'be',is:'be',are:'be',been:'be',children:'child',better:'good',best:'good',mice:'mouse',ran:'run',saw:'see',took:'take',has:'have',had:'have',men:'man',women:'woman',feet:'foot',gave:'give',ate:'eat',wrote:'write',flew:'fly',grew:'grow',did:'do',does:'do',bought:'buy',people:'person'};
+function lem(w){if(IRR[w])return IRR[w];if(w.length<4)return w;
+if(/ies$/.test(w))return w.slice(0,-3)+'y';
+if(/(ing|ed)$/.test(w)){let b=w.replace(/(ing|ed)$/,'');if(b.length<3)return w;if(/([^aeiouls])\1$/.test(b))return b.slice(0,-1);if(/[^aeiou][aeiou][^aeiouwxy]$/.test(b)&&b.length<=5)return b+'e';return b}
+if(/(sses|xes|ches|shes)$/.test(w))return w.slice(0,-2);if(/[^s]s$/.test(w)&&!/(us|is)$/.test(w))return w.slice(0,-1);return w}
+function stops(){const w=words(T()),k=w.filter(x=>!SW.has(x)),r=w.filter(x=>SW.has(x));out(1,`<b>Kept (${k.length}):</b><br>${k.map(x=>chip(x)).join('')}<br><b>Removed (${r.length}):</b><br>${r.map(x=>chip(x)).join('')}`)}
+function stems(){const w=[...new Set(words(T()).filter(x=>!SW.has(x)))];out(1,tbl(['Word','Stem'],w.map(x=>({c:[x,'<b>'+stem(x)+'</b>']}))))}
+function lemmas(){const w=[...new Set(words(T()).filter(x=>!SW.has(x)))];out(1,tbl(['Word','Stem','Lemma'],w.map(x=>({c:[x,stem(x),'<b>'+lem(x)+'</b>']}))))}
+// 3
+const freq=a=>{const m={};a.forEach(x=>m[x]=(m[x]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1])};
+function bow(){const f=freq(words(T()));out(2,`<b>Vocabulary size: ${f.length}</b><br>`+tbl(['Word','Count'],f.map(([a,b])=>({c:[a,b]}))))}
+function ngram(){const n=+$('n').value,w=words(T()),g=[];for(let i=0;i+n<=w.length;i++)g.push(w.slice(i,i+n).join(' '));out(2,`<b>${g.length} ${n}-grams</b><br>`+freq(g).map(([a,b])=>chip(a,b>1?'×'+b:null)).join(''))}
+// 4
+const DT="the a an this that these those my your his her its our their some any each every no".split(" "),IN="of in on at by for with from into over near about under after before between through during".split(" "),PR="i you he she it we they me him us them".split(" "),CC=["and","or","but","nor","so","yet"],MD="can could will would should may might must".split(" "),BE={is:'VBZ',are:'VBP',am:'VBP',was:'VBD',were:'VBD',be:'VB',been:'VBN',has:'VBZ',have:'VBP',had:'VBD',do:'VBP',does:'VBZ',did:'VBD'};
+function tag(w,i,all){if(/^\d/.test(w))return'CD';if(/^[^\w]$/.test(w))return'PUNCT';const l=w.toLowerCase();if(DT.includes(l))return'DT';if(IN.includes(l))return'IN';if(PR.includes(l))return'PRP';if(CC.includes(l))return'CC';if(MD.includes(l))return'MD';if(l=='to')return'TO';if(BE[l])return BE[l];
+if(/^[A-Z]/.test(w)&&i>0&&!/[.!?]/.test(all[i-1]))return'NNP';if(/ing$/.test(l))return'VBG';if(/ed$/.test(l)||IRR[l]&&/^(ran|saw|took|gave|ate|wrote|flew|grew|went|bought)$/.test(l))return'VBD';if(/ly$/.test(l))return'RB';if(/(ous|ful|ive|al|able|ic|less)$/.test(l)||['good','bad','big','small','recent'].includes(l))return'JJ';if(/(loves|hates|joins|grows|has)$/.test(l))return'VBZ';if(/s$/.test(l)&&l.length>3)return'NNS';return'NN'}
+function pos(){const t=toks(T());out(3,t.map((w,i)=>chip(w,tag(w,i,t))).join('')+'<br><small>NN noun · NNS plural · NNP proper · VBD past · VBG -ing · VBZ 3rd-person · JJ adjective · RB adverb · DT determiner · IN preposition · PRP pronoun · CD number · MD modal</small>')}
+// 5
+const GPE="India Mumbai Thane Delhi London Paris Pune Bangalore Tokyo USA China Germany Japan France Maharashtra Europe".split(" "),ORG="Google Microsoft Amazon Apple Tesla Anthropic Infosys Wipro Meta OpenAI".split(" "),ORGK=/^(Inc|Ltd|Corp|University|Bank|Institute|Company)$/,MON="January February March April May June July August September October November December".split(" ");
+function ner(){const t=T(),ents=[];const rx=[[/[\w.]+@[\w.]+\.\w+/g,'EMAIL'],[/[$€₹£]\s?\d[\d,.]*/g,'MONEY'],[/\d+(?:\.\d+)?\s?%/g,'PERCENT'],[new RegExp(`\\b\\d{1,2}\\s(?:${MON.join('|')})\\s\\d{4}\\b|\\b(?:${MON.join('|')})\\s\\d{1,2},?\\s\\d{4}\\b|\\b(?:${MON.join('|')})\\s\\d{4}\\b`,'g'),'DATE']];
+let rest=t;rx.forEach(([r,l])=>{(t.match(r)||[]).forEach(m=>ents.push([m,l]));rest=rest.replace(r,' ')});
+const re=/(?:(?:Dr|Mr|Mrs|Ms|Prof)\.\s)?[A-Z][a-z]+(?:\s(?:[A-Z][a-z]+))*/g;let m;while(m=re.exec(rest)){let s=m[0],idx=m.index,start=idx==0||/[.!?]\s*$/.test(rest.slice(0,idx));const ws=s.replace(/^(Dr|Mr|Mrs|Ms|Prof)\.\s/,'').split(' '),title=s!==ws.join(' ');
+if(ws.some(x=>ORG.includes(x))||ORGK.test(ws[ws.length-1])&&ws.length>1)ents.push([s,'ORG']);else if(ws.every(x=>GPE.includes(x)))ents.push([s,'GPE']);else if(MON.includes(s))continue;else if(title||(!start&&ws.length>=1&&!/^(The|He|She|It|We|They|I)$/.test(s)))ents.push([s,ws.length>0&&GPE.includes(ws[0])?'GPE':'PERSON']);else if(start&&ws.length>1)ents.push([s,'PERSON'])}
+if(!ents.length)return out(4,'No entities found.');out(4,tbl(['Entity','Type'],ents.map(([a,b])=>({c:[E(a),chip(b)]}))))}
+// 6
+function cloud(){const w=words(T()).filter(x=>!SW.has(x)&&x.length>2),f=freq(w).slice(0,45),mx=f[0]?f[0][1]:1,col=['#E8710A','#FF9A3C','#C2570A','#F5A623','#A0480A','#D9822B'];
+const u=new Set(w).size,sn=T().split(/[.!?]+/).filter(x=>x.trim()).length;
+out(5,`<div id="cloud">${f.sort(()=>Math.random()-.5).map(([a,b])=>`<span title="${b}" style="font-size:${15+38*b/mx}px;color:${col[Math.floor(Math.random()*col.length)]}">${E(a)}</span>`).join('')}</div>`+tbl(['Statistic','Value'],[['Total words (no stop words)',w.length],['Unique words',u],['Lexical diversity',(u/(w.length||1)).toFixed(2)],['Sentences',sn],['Avg word length',(w.join('').length/(w.length||1)).toFixed(1)],['Most frequent',f[0]?f[0][0]+' ('+f[0][1]+')':'-']].map(c=>({c}))))}
+// 7
+const WN=("good;adj;fine,nice,great,well;bad,evil;having desirable qualities|bad;adj;poor,awful,terrible;good;not good|happy;adj;glad,joyful,cheerful;sad,unhappy;feeling pleasure|sad;adj;unhappy,sorrowful,gloomy;happy,glad;feeling sorrow|big;adj;large,huge,great;small,little;of great size|small;adj;little,tiny,minor;big,large;of limited size|fast;adj;quick,rapid,speedy;slow;moving quickly|slow;adj;sluggish,unhurried;fast,quick;moving with low speed|hot;adj;warm,heated,burning;cold,cool;high temperature|cold;adj;cool,chilly,freezing;hot,warm;low temperature|love;verb;adore,cherish,like;hate,dislike;feel deep affection|hate;verb;detest,despise,loathe;love,adore;feel intense dislike|beautiful;adj;pretty,lovely,gorgeous;ugly;pleasing to the senses|smart;adj;clever,intelligent,bright;stupid,dull;mentally quick|begin;verb;start,commence,initiate;end,finish;take the first step|buy;verb;purchase,acquire;sell;obtain for money|rich;adj;wealthy,affluent;poor;having much money|start;verb;begin,commence,launch;stop,end;set in motion|car;noun;auto,automobile,motorcar;;a road vehicle|happy;adj;glad,joyful;sad;content").split('|').map(s=>s.split(';'));
+function wn(k){const w=$('w').value.trim().toLowerCase(),e=WN.filter(x=>x[0]==w);if(!e.length)return out(6,`"${E(w)}" is not in the mini dictionary. Try: ${[...new Set(WN.map(x=>x[0]))].map(x=>chip(x)).join('')}`);
+const L=[...new Set(e.flatMap(x=>x[k=='syn'?2:3].split(',')).filter(Boolean))];out(6,`<b>${k=='syn'?'Synonyms':'Antonyms'} of "${E(w)}"</b> (${e[0][1]}) — <i>${E(e[0][4])}</i><br>${L.length?L.map(x=>chip(x)).join(''):'None found.'}`)}
+const BR={news:"The city council approved the new budget on Monday. Officials said the government will invest more money in schools and roads.",fiction:"She walked slowly along the river and thought about the old house. The night was cold and the wind carried a strange sound.",science:"The experiment showed that the reaction rate increased with temperature. Researchers measured the data and the results were good.",religion:"People gathered at the temple to pray and the community shared food. Faith gave them hope in a good future."};
+function brown(){const w=$('w').value.trim().toLowerCase(),all=words(Object.values(BR).join(' ')),f=freq(all.filter(x=>!SW.has(x))).slice(0,10);
+const conc=Object.entries(BR).flatMap(([c,t])=>t.split(/(?<=\.)\s/).filter(s=>words(s).includes(w)).map(s=>[c,s]));
+out(6,`<b>Mini Brown-style corpus:</b> ${Object.keys(BR).map(c=>chip(c,words(BR[c]).length+' words')).join('')}<br><b>Corpus size:</b> ${all.length} words · <b>"${E(w)}" occurs:</b> ${all.filter(x=>x==w).length}×<br><b>Top words:</b> ${f.map(([a,b])=>chip(a,b)).join('')}<br><b>Concordance for "${E(w)}":</b>${conc.length?tbl(['Category','Sentence'],conc.map(c=>({c:[c[0],E(c[1])]}))):' none — try "good", "river", "cold", "money".'}`)}
+// 8
+const SN={bank:[["financial institution","financial institution that accepts deposits money loan account savings interest"],["river bank","sloping land beside a river water stream shore fishing"]],bat:[["flying mammal","nocturnal flying mammal wings cave night animal"],["sports bat","club used to hit the ball in cricket baseball game player"]],python:[["snake","large snake reptile constricts prey jungle animal"],["programming language","programming language code software developer computer program"]],apple:[["fruit","edible fruit tree sweet eat orchard juice"],["company","technology company iphone computer software mac"]],mouse:[["rodent","small rodent cheese tail animal pet floor"],["computer device","computer pointing device click cursor screen"]],spring:[["season","season after winter flowers bloom warm weather"],["coil","elastic metal coil device compress bounce"],["water source","natural water source flows ground stream"]],light:[["illumination","brightness lamp sun ray visible illuminate"],["not heavy","not heavy little weight easy carry"]],bass:[["fish","fish freshwater lake fishing catch"],["low sound","low sound music guitar instrument frequency"]]};
+Object.keys(SN).forEach(k=>$('lw').add(new Option(k,k)));
+$('ls').addEventListener('input',()=>{const f=words($('ls').value).find(x=>SN[x]);if(f)$('lw').value=f});
+function lesk(){const w=$('lw').value,c=new Set(words($('ls').value).filter(x=>x!=w&&!SW.has(x)).map(stem));
+const sc=SN[w].map(([n,g])=>{const o=[...new Set(words(g).filter(x=>!SW.has(x)))].filter(x=>c.has(stem(x)));return{n,g,o}}),mx=Math.max(...sc.map(s=>s.o.length)),b=sc.findIndex(s=>s.o.length==mx);
+out(7,`<b>Ambiguous word:</b> ${w}<br>`+tbl(['Sense','Definition','Overlap','Score'],sc.map((s,i)=>({cls:i==b&&mx>0?'best':'',c:[s.n+(i==b&&mx>0?' ✅':''),E(s.g),s.o.join(', ')||'—',s.o.length]})))+`<p><b>Result:</b> ${mx>0?`"${w}" means <b>${sc[b].n}</b> here.`:'No overlap found — add more context words.'}</p>`)}
+</script></body></html>
