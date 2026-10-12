@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>LexiNest — Smart NLP Text Analyzer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F4EE">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;1,8..60,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -39,12 +40,13 @@
       font-size: 14px;
       line-height: 1.5;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Top Navigation (64px) */
+    /* Top Navigation (64px) on Desktop */
     header {
       height: 64px;
       background: var(--surface);
@@ -170,7 +172,7 @@
       gap: 20px;
     }
 
-    /* Sticky Corpus Input Panel */
+    /* Sticky Corpus Input Panel (Desktop) */
     .corpus-panel {
       position: sticky;
       top: 64px;
@@ -270,7 +272,7 @@
       font-size: 13.5px;
     }
 
-    /* Sub-tabs: Practice & Concept */
+    /* Sub-tabs: Practice & Concept (Desktop) */
     .subtabs-bar {
       display: flex;
       border-bottom: 1px solid var(--border);
@@ -302,7 +304,7 @@
       padding: 20px 24px;
     }
 
-    /* Concept Pane: 3 Columns with Hairline Dividers */
+    /* Concept Pane: 3 Columns with Hairline Dividers (Desktop) */
     .concept-columns {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -327,6 +329,12 @@
       letter-spacing: 0.6px;
       color: var(--primary);
       margin-bottom: 8px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      text-align: left;
+      padding: 0;
+      width: 100%;
     }
     .concept-col-body {
       color: var(--text);
@@ -358,6 +366,7 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       transition: background-color 0.15s;
     }
@@ -378,6 +387,7 @@
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       transition: border-color 0.15s, background-color 0.15s;
     }
@@ -396,13 +406,26 @@
       font-family: inherit;
       font-size: 13px;
     }
-    select:focus, input[type="text"]:focus {
+    select:focus, input[type="text"]:focus, textarea:focus {
       outline: 2px solid var(--primary);
     }
 
     /* Output Results Display */
     .output-area {
       min-height: 48px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .m-empty-state {
+      padding: 16px 12px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      background: #FAF9F5;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      margin: 8px 0;
     }
 
     /* Stats Row: Large Number + Label */
@@ -415,6 +438,7 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       margin-bottom: 14px;
+      flex-wrap: wrap;
     }
     .stat-item {
       display: flex;
@@ -539,52 +563,560 @@
       cursor: default;
     }
 
-    /* Responsive: Mobile & Tablet */
-    @media (max-width: 900px) {
+    /* Hidden elements on desktop */
+    #m-screen-list,
+    #m-top-bar,
+    .m-corpus-bar,
+    .m-btn-start-practice,
+    .m-topic-nav,
+    .acc-num,
+    .acc-chevron,
+    #m-sheet-overlay,
+    #m-sheet {
+      display: none !important;
+    }
+
+    /* =========================================================
+       MOBILE & TABLET STYLING (< 900px)
+       ========================================================= */
+    @media (max-width: 899px) {
+      /* Hide desktop-specific chrome */
       .app-container {
-        grid-template-columns: 1fr;
+        display: block !important;
+        max-width: 100%;
+        padding: 0;
       }
       aside.sidebar {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding: 12px;
-        overflow-x: auto;
+        display: none !important;
       }
-      .sidebar-group {
-        margin-bottom: 0;
-        display: flex;
-        gap: 6px;
+      .corpus-panel {
+        display: none !important;
       }
-      .sidebar-group-title {
-        display: none;
+      .header-attribution {
+        display: none !important;
       }
-      .nav-list {
-        display: flex;
-        gap: 6px;
+      .brand-sep, .brand-sub {
+        display: none !important;
       }
-      .nav-item-btn {
-        white-space: nowrap;
-        border-left: none;
-        border-bottom: 2px solid transparent;
-        padding: 8px 12px;
+      header {
+        height: 56px !important;
+        position: sticky;
+        top: 0;
+        z-index: 90;
       }
-      .nav-item-btn.active {
-        border-left: none;
-        border-bottom-color: var(--primary);
+      .header-inner {
+        padding: 0 16px;
       }
+
+      /* Base layout */
       main.workspace {
-        padding: 16px;
+        padding: 0 !important;
+        gap: 0 !important;
       }
+
+      /* SCREEN 1: TOPIC LIST */
+      body.mode-list header {
+        display: block !important;
+      }
+      body.mode-list #m-screen-list {
+        display: block !important;
+      }
+      body.mode-list .module-card,
+      body.mode-list #m-top-bar {
+        display: none !important;
+      }
+
+      #m-screen-list {
+        padding: 16px 16px max(32px, env(safe-area-inset-bottom));
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .m-list-intro {
+        margin-bottom: 20px;
+        padding-top: 4px;
+      }
+      .m-intro-sub {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+      }
+      .m-intro-title {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 32px;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: -0.5px;
+      }
+
+      /* Staggered animated rows */
+      .m-list {
+        display: flex;
+        flex-direction: column;
+      }
+      .m-group-label {
+        font-size: 11.5px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--text-muted);
+        padding: 18px 0 6px;
+      }
+      .m-group-label:first-child {
+        padding-top: 4px;
+      }
+
+      .m-topic-row {
+        width: 100%;
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 6px;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        cursor: pointer;
+        color: var(--text);
+        font-family: inherit;
+        transition: background-color 0.15s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .m-topic-row:active {
+        background-color: rgba(31, 77, 58, 0.06);
+      }
+      .m-row-num {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: var(--text-muted);
+        min-width: 22px;
+      }
+      .m-row-content {
+        flex: 1;
+        min-width: 0;
+      }
+      .m-row-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .m-row-sub {
+        font-size: 12.5px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: 2px;
+      }
+      .m-row-chevron {
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+      }
+      .m-row-check {
+        display: none;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .m-row-check.visited {
+        display: inline-block;
+      }
+
+      .m-list-footer {
+        padding: 32px 0 16px;
+        text-align: center;
+        font-size: 12.5px;
+        color: var(--text-muted);
+      }
+      .m-list-footer strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      /* Animation for Screen 1 */
+      .m-list-animated .m-item {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      .m-list-animated.play .m-item {
+        animation: mItem .5s cubic-bezier(.2,.7,.2,1) forwards;
+        animation-delay: calc(var(--i) * 90ms);
+      }
+      .m-list-animated.instant .m-item {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        transition: opacity .15s ease;
+      }
+      @keyframes mItem {
+        to { opacity: 1; transform: none; }
+      }
+
+      /* SCREEN 2: TOPIC VIEW */
+      body.mode-topic header {
+        display: none !important;
+      }
+      body.mode-topic #m-screen-list {
+        display: none !important;
+      }
+      body.mode-topic #m-top-bar {
+        display: flex !important;
+      }
+
+      /* Sticky Top Bar (56px) */
+      .m-top-bar {
+        height: 56px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 80;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 12px;
+      }
+      .m-back-btn {
+        width: 44px;
+        height: 44px;
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text);
+        cursor: pointer;
+        border-radius: 8px;
+      }
+      .m-back-btn:active {
+        background-color: rgba(31, 77, 58, 0.06);
+      }
+      .m-top-title {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--text);
+        text-align: center;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 8px;
+      }
+      .m-top-step {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        min-width: 44px;
+        text-align: right;
+        padding-right: 4px;
+      }
+
+      /* Module card inside topic view */
+      .module-card {
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+      .module-card-head {
+        display: none !important;
+      }
+
+      /* Subtabs sticky under 56px top bar */
+      .subtabs-bar {
+        position: sticky;
+        top: 56px;
+        z-index: 75;
+        background: var(--surface);
+        padding: 0;
+        gap: 0;
+        width: 100%;
+        display: flex !important;
+      }
+      .subtab-btn {
+        flex: 1;
+        text-align: center;
+        padding: 12px 0;
+        font-size: 14px;
+        min-height: 44px;
+      }
+
+      .tab-content {
+        padding: 16px 16px max(32px, env(safe-area-inset-bottom));
+      }
+
+      /* Accordions for Concept Tab */
       .concept-columns {
-        grid-template-columns: 1fr;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+      .concept-col {
+        position: static !important;
+        border-bottom: 1px solid var(--border);
+      }
+      .concept-col:last-child {
+        border-bottom: none;
       }
       .concept-col:not(:last-child)::after {
-        display: none;
+        display: none !important;
+      }
+
+      .concept-col-title {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 52px;
+        padding: 14px 16px;
+        background: #FAFAF7;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 0 !important;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .acc-num {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 4px;
+        background: var(--border);
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        margin-right: 10px;
+      }
+      .acc-title {
+        flex: 1;
+        text-align: left;
+      }
+      .acc-chevron {
+        display: inline-flex !important;
+        color: var(--text-muted);
+        transition: transform 0.2s ease;
+      }
+      .concept-col.open .acc-chevron {
+        transform: rotate(180deg);
+      }
+
+      .concept-col-body {
+        display: none !important;
+        padding: 16px;
+        background: var(--surface);
+        font-size: 13.5px;
+        line-height: 1.6;
+      }
+      .concept-col.open .concept-col-body {
+        display: block !important;
+      }
+
+      .m-btn-start-practice {
+        display: flex !important;
+        width: 100% !important;
+        min-height: 48px;
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 12px;
+      }
+
+      /* Slim Corpus row in Practice Tab */
+      .m-corpus-bar {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 16px;
+        min-height: 44px;
+        cursor: pointer;
+        gap: 8px;
+      }
+      .m-corpus-bar:active {
+        background: #FAFAF7;
+      }
+      .m-corpus-text {
+        font-size: 13px;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+      }
+      .m-corpus-text strong {
+        color: var(--text);
+        margin-right: 4px;
+      }
+      .m-corpus-edit-btn {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        padding: 2px 6px;
+      }
+
+      /* Toolbar vertical stacking on mobile */
+      .toolbar-row {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        align-items: stretch !important;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 16px;
+        margin-bottom: 16px;
+      }
+      .toolbar-row .btn-primary,
+      .toolbar-row .btn-outline,
+      .toolbar-row select,
+      .toolbar-row input[type="text"] {
+        width: 100% !important;
+        min-height: 48px !important;
+        font-size: 16px !important; /* Prevents iOS auto-zoom */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      .toolbar-row > div {
+        width: 100% !important;
+        margin-left: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+      }
+
+      /* Bottom Topic Navigation */
+      .m-topic-nav {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        gap: 12px;
+      }
+      .m-nav-btn {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 8px 12px;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+      }
+      .m-nav-btn:active {
+        background: rgba(31, 77, 58, 0.06);
+        border-radius: 6px;
+      }
+      .m-nav-btn.hidden {
+        visibility: hidden;
+      }
+
+      /* Bottom Sheet Modal for Corpus */
+      #m-sheet-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 200;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+      }
+      #m-sheet-overlay.active {
+        display: block !important;
+        opacity: 1;
+        visibility: visible;
+      }
+
+      #m-sheet {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--surface);
+        border-radius: 16px 16px 0 0;
+        padding: 20px 16px max(24px, env(safe-area-inset-bottom));
+        z-index: 201;
+        transform: translateY(100%);
+        transition: transform 0.25s cubic-bezier(.2,.7,.2,1);
+        display: flex !important;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
+        max-height: 85vh;
+        max-height: 85dvh;
+      }
+      #m-sheet.active {
+        transform: translateY(0);
+      }
+      .m-sheet-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .m-sheet-title {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      #m-sheet-txt {
+        width: 100%;
+        min-height: 140px;
+        padding: 12px;
+        font-size: 16px !important; /* Prevents iOS auto-zoom */
+        font-family: inherit;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #FAFAF7;
+        color: var(--text);
+        line-height: 1.5;
+        resize: vertical;
+      }
+      .m-sheet-done-btn {
+        min-height: 48px;
+        font-size: 15px;
+        font-weight: 600;
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .m-list-animated .m-item {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+      #m-sheet {
+        transition: none !important;
+      }
+      #m-sheet-overlay {
+        transition: none !important;
       }
     }
   </style>
 </head>
-<body>
+<body class="mode-list">
 
 <!-- ============ LEXINEST INTRO: paste right after <body> ============ -->
 <div id="intro" role="dialog" aria-label="LexiNest introduction">
@@ -755,7 +1287,7 @@
 })();
 </script>
 
-  <!-- Header (64px) -->
+  <!-- Desktop Header (64px) / Mobile List Header (56px) -->
   <header>
     <div class="header-inner">
       <div class="brand">
@@ -776,10 +1308,132 @@
     </div>
   </header>
 
+  <!-- Mobile Sticky Top Bar (Screen 2: Topic View) -->
+  <div id="m-top-bar" class="m-top-bar">
+    <button type="button" class="m-back-btn" onclick="navigateToList()" aria-label="Back to topics">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 18-6-6 6-6"/>
+      </svg>
+    </button>
+    <div class="m-top-title" id="m-top-title">Text Processing</div>
+    <div class="m-top-step" id="m-top-step">1 / 8</div>
+  </div>
+
+  <!-- Mobile Screen 1: Topic List -->
+  <div id="m-screen-list">
+    <div class="m-list-intro">
+      <p class="m-intro-sub">Smart NLP Text Analyzer</p>
+      <h1 class="m-intro-title">Choose a topic</h1>
+    </div>
+
+    <div class="m-list m-list-animated">
+      <!-- BASICS -->
+      <div class="m-group-label m-item">BASICS</div>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(0)">
+        <span class="m-row-num">01</span>
+        <div class="m-row-content">
+          <div class="m-row-title">Text Processing <span class="m-row-check" id="m-check-0">✓</span></div>
+          <div class="m-row-sub">Tokenize · Filter · Script Check</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(1)">
+        <span class="m-row-num">02</span>
+        <div class="m-row-content">
+          <div class="m-row-title">Stop/Stem/Lemma <span class="m-row-check" id="m-check-1">✓</span></div>
+          <div class="m-row-sub">Noise Removal &amp; Root Words</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(2)">
+        <span class="m-row-num">03</span>
+        <div class="m-row-content">
+          <div class="m-row-title">BoW &amp; N-Gram <span class="m-row-check" id="m-check-2">✓</span></div>
+          <div class="m-row-sub">Vectorization &amp; Sequences</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <!-- LINGUISTICS -->
+      <div class="m-group-label m-item">LINGUISTICS</div>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(3)">
+        <span class="m-row-num">04</span>
+        <div class="m-row-content">
+          <div class="m-row-title">POS Tagging <span class="m-row-check" id="m-check-3">✓</span></div>
+          <div class="m-row-sub">Grammar &amp; Syntactic Roles</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(4)">
+        <span class="m-row-num">05</span>
+        <div class="m-row-content">
+          <div class="m-row-title">NER <span class="m-row-check" id="m-check-4">✓</span></div>
+          <div class="m-row-sub">Named Entity Extraction</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <!-- ANALYSIS -->
+      <div class="m-group-label m-item">ANALYSIS</div>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(5)">
+        <span class="m-row-num">06</span>
+        <div class="m-row-content">
+          <div class="m-row-title">Word Cloud <span class="m-row-check" id="m-check-5">✓</span></div>
+          <div class="m-row-sub">EDA &amp; Visual Analytics</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(6)">
+        <span class="m-row-num">07</span>
+        <div class="m-row-content">
+          <div class="m-row-title">WordNet &amp; Brown <span class="m-row-check" id="m-check-6">✓</span></div>
+          <div class="m-row-sub">Lexicon &amp; Corpus Concordance</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <button type="button" class="m-topic-row m-item" onclick="navigateToTopic(7)">
+        <span class="m-row-num">08</span>
+        <div class="m-row-content">
+          <div class="m-row-title">Lesk WSD <span class="m-row-check" id="m-check-7">✓</span></div>
+          <div class="m-row-sub">Word Sense Disambiguation</div>
+        </div>
+        <span class="m-row-chevron">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
+        </span>
+      </button>
+
+      <div class="m-list-footer m-item">
+        Created by <strong>Dhiraj Jadhav</strong>
+      </div>
+    </div>
+  </div>
+
   <!-- Main Container -->
   <div class="app-container">
 
-    <!-- Flat Sidebar List -->
+    <!-- Flat Sidebar List (Desktop) -->
     <aside class="sidebar">
       <!-- Group 1: Basics -->
       <div class="sidebar-group">
@@ -854,7 +1508,7 @@
     <!-- Right Workspace Area -->
     <main class="workspace">
 
-      <!-- Sticky Corpus Input Panel -->
+      <!-- Sticky Corpus Input Panel (Desktop) -->
       <div class="corpus-panel">
         <div class="corpus-card">
           <div class="corpus-header">
@@ -872,7 +1526,7 @@
               </button>
             </div>
           </div>
-          <textarea id="txt" rows="3">Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India.</textarea>
+          <textarea id="txt" rows="3" oninput="syncCorpusToMobile(this.value)">Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India.</textarea>
         </div>
       </div>
 
@@ -889,6 +1543,12 @@
         <div class="tab-content">
           <!-- Practice Pane -->
           <div class="pane-practice" id="mod-0-practice">
+            <!-- Mobile Slim Corpus Bar -->
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div class="toolbar-row">
               <button class="btn-primary" onclick="tokenize()">Tokenize text</button>
               <button class="btn-outline" onclick="filt()">Filter (clean)</button>
@@ -903,29 +1563,62 @@
                 <button class="btn-outline" onclick="validate()">Validate script</button>
               </div>
             </div>
-            <div class="output-area" id="o0"></div>
+            <div class="output-area" id="o0">
+              <div class="m-empty-state">Press Tokenize text to see the output.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn hidden">← Previous</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(1)">Next topic →</button>
+            </div>
           </div>
+
           <!-- Concept Pane -->
           <div class="pane-concept" id="mod-0-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Raw human language is unstructured and contains punctuation, variable whitespace, and numbers. Without splitting into discrete tokens, computational models cannot index or parse vocabulary.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Regex boundaries detect sentence terminators and word breaks. Filters remove punctuation while preserving contraction apostrophes. Unicode script checks count character code blocks against target language scripts.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Multilingual text routing, spam detection pipelines, search engine crawlers, tokenizer layers in Large Language Models (BPE/WordPiece).
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(0, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn hidden">← Previous</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(1)">Next topic →</button>
             </div>
           </div>
         </div>
@@ -943,34 +1636,71 @@
         </div>
         <div class="tab-content">
           <div class="pane-practice" id="mod-1-practice">
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div class="toolbar-row">
               <button class="btn-primary" onclick="stops()">Remove stop words</button>
               <button class="btn-outline" onclick="stems()">Stemming</button>
               <button class="btn-outline" onclick="lemmas()">Lemmatization</button>
             </div>
-            <div class="output-area" id="o1"></div>
+            <div class="output-area" id="o1">
+              <div class="m-empty-state">Press Remove stop words or Stemming to see the output.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(0)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(2)">Next topic →</button>
+            </div>
           </div>
           <div class="pane-concept" id="mod-1-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Frequent function words ("the", "is", "at") carry low semantic variance. Consolidating inflected words ("running", "ran" to "run") reduces vocabulary sparsity for search and topic models.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   <b>Stemming:</b> Uses heuristic rules to truncate suffixes (fast, may produce pseudo-stems like "studi").<br>
                   <b>Lemmatization:</b> Performs morphological lookup to output genuine dictionary base forms.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Full-text search engines (Elasticsearch, Lucene), keyword indexing, sentiment analyzers, legal document discovery.
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(1, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(0)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(2)">Next topic →</button>
             </div>
           </div>
         </div>
@@ -988,6 +1718,11 @@
         </div>
         <div class="tab-content">
           <div class="pane-practice" id="mod-2-practice">
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div class="toolbar-row">
               <button class="btn-primary" onclick="bow()">Show BoW</button>
               <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
@@ -1001,28 +1736,60 @@
                 <button class="btn-outline" onclick="ngram()">Extract N-grams</button>
               </div>
             </div>
-            <div class="output-area" id="o2"></div>
+            <div class="output-area" id="o2">
+              <div class="m-empty-state">Press Show BoW or Extract N-grams to see the output.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(1)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(3)">Next topic →</button>
+            </div>
           </div>
           <div class="pane-concept" id="mod-2-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Algorithms operate over numerical matrices. BoW creates document-term vectors, while N-grams retain local phrase contexts that unigram frequency drops.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   BoW aggregates total occurrences per vocabulary entry. N-gram uses a sliding window of width N across ordered tokens (e.g. "river bank" preserves geographic sense).
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Spam classification (Naive Bayes), predictive text autocomplete, plagiarism checking, TF-IDF ranking.
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(2, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(1)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(3)">Next topic →</button>
             </div>
           </div>
         </div>
@@ -1040,31 +1807,68 @@
         </div>
         <div class="tab-content">
           <div class="pane-practice" id="mod-3-practice">
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div class="toolbar-row">
               <button class="btn-primary" onclick="pos()">Tag text</button>
             </div>
-            <div class="output-area" id="o3"></div>
+            <div class="output-area" id="o3">
+              <div class="m-empty-state">Press Tag text to see the output.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(2)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(4)">Next topic →</button>
+            </div>
           </div>
           <div class="pane-concept" id="mod-3-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Identical words have different roles depending on context ("to book a hotel" is a verb, "read a book" is a noun). POS tags resolve syntactic ambiguities.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Assigns Penn Treebank tags using lexicon lookups, morphological suffix patterns (-ing, -ly, -ous), auxiliary verb tables, and capitalization positions.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Grammar correction software, Text-to-Speech (TTS) pronunciation, dependency tree parsers, relation extraction.
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(3, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(2)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(4)">Next topic →</button>
             </div>
           </div>
         </div>
@@ -1082,31 +1886,68 @@
         </div>
         <div class="tab-content">
           <div class="pane-practice" id="mod-4-practice">
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div class="toolbar-row">
               <button class="btn-primary" onclick="ner()">Extract entities</button>
             </div>
-            <div class="output-area" id="o4"></div>
+            <div class="output-area" id="o4">
+              <div class="m-empty-state">Press Extract entities to see the output.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(3)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(5)">Next topic →</button>
+            </div>
           </div>
           <div class="pane-concept" id="mod-4-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Automates facts extraction from documents without requiring human reading, mapping unstructured text into structured database entries.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Combines gazetteers (known organizations, cities, countries), honorific triggers (Dr., Prof.), date/email/money regexes, and capitalized sequence chunks.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Resume filtering, financial intelligence extraction, biomedical literature analysis, customer support ticket routing.
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(4, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(3)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(5)">Next topic →</button>
             </div>
           </div>
         </div>
@@ -1124,31 +1965,68 @@
         </div>
         <div class="tab-content">
           <div class="pane-practice" id="mod-5-practice">
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div class="toolbar-row">
               <button class="btn-primary" onclick="cloud()">Generate word cloud &amp; stats</button>
             </div>
-            <div class="output-area" id="o5"></div>
+            <div class="output-area" id="o5">
+              <div class="m-empty-state">Press Generate word cloud &amp; stats to see the output.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(4)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(6)">Next topic →</button>
+            </div>
           </div>
           <div class="pane-concept" id="mod-5-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Provides instantaneous thematic comprehension of texts before running heavy downstream machine learning models.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Filters stop words, calculates frequency distributions, normalizes font sizes proportionally to maximum frequency, and computes Lexical Diversity (TTR).
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Social media trend monitoring, customer review analysis, survey feedback summaries, content theme auditing.
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(5, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(4)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(6)">Next topic →</button>
             </div>
           </div>
         </div>
@@ -1166,35 +2044,72 @@
         </div>
         <div class="tab-content">
           <div class="pane-practice" id="mod-6-practice">
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div class="toolbar-row">
               <input type="text" id="w" value="good" placeholder="Enter word" style="width: 160px;">
               <button class="btn-primary" onclick="wn('syn')">Synonyms</button>
               <button class="btn-outline" onclick="wn('ant')">Antonyms</button>
               <button class="btn-outline" onclick="brown()">Brown corpus</button>
             </div>
-            <div class="output-area" id="o6"></div>
+            <div class="output-area" id="o6">
+              <div class="m-empty-state">Enter a word and select Synonyms, Antonyms, or Brown corpus.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(5)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(7)">Next topic →</button>
+            </div>
           </div>
           <div class="pane-concept" id="mod-6-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Captures semantic relationships (synonyms, opposites) beyond exact string matching. Concordance illustrates how words naturally appear in published texts.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   <b>WordNet:</b> Traverses synonym sets (synsets) linked to definitions.<br>
                   <b>Brown Corpus:</b> Extracts Key Word In Context (KWIC) occurrences across news, fiction, science, and religion genres.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Search query expansion, automated paraphrasing, lexical thesaurus tools, linguistic research.
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(6, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(5)">← Previous topic</button>
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(7)">Next topic →</button>
             </div>
           </div>
         </div>
@@ -1212,6 +2127,11 @@
         </div>
         <div class="tab-content">
           <div class="pane-practice" id="mod-7-practice">
+            <div class="m-corpus-bar" onclick="openCorpusSheet()">
+              <span class="m-corpus-text"><strong>Corpus:</strong> <span class="m-corpus-preview"></span></span>
+              <button type="button" class="m-corpus-edit-btn">Edit</button>
+            </div>
+
             <div style="margin-bottom: 12px;">
               <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Context sentence:</label>
               <input type="text" id="ls" value="I deposited money at the bank to open a savings account" style="width: 100%;">
@@ -1221,34 +2141,85 @@
               <select id="lw" style="width: 180px;"></select>
               <button class="btn-primary" onclick="lesk()">Disambiguate</button>
             </div>
-            <div class="output-area" id="o7"></div>
+            <div class="output-area" id="o7">
+              <div class="m-empty-state">Select an ambiguous word and press Disambiguate.</div>
+            </div>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(6)">← Previous topic</button>
+              <button type="button" class="m-nav-btn hidden">Next →</button>
+            </div>
           </div>
           <div class="pane-concept" id="mod-7-concept" style="display: none;">
             <div class="concept-columns">
-              <div class="concept-col">
-                <div class="concept-col-title">Why it matters</div>
+              <div class="concept-col open">
+                <button type="button" class="concept-col-title" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span class="acc-num">1</span>
+                  <span class="acc-title">Why it matters</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Words have multiple meanings ("bank" as a financial firm or river edge). Disambiguation prevents incorrect translations and conversational misunderstandings.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Mechanism</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">2</span>
+                  <span class="acc-title">Mechanism</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Michael Lesk's algorithm stems the context sentence and counts word overlap with each candidate sense definition. The sense with the highest overlap score wins.
                 </div>
               </div>
               <div class="concept-col">
-                <div class="concept-col-title">Real-world applications</div>
+                <button type="button" class="concept-col-title" aria-expanded="false" onclick="toggleAccordion(this)">
+                  <span class="acc-num">3</span>
+                  <span class="acc-title">Real-world applications</span>
+                  <span class="acc-chevron">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </span>
+                </button>
                 <div class="concept-col-body">
                   Machine translation, semantic question answering, voice assistant intent resolution.
                 </div>
               </div>
+            </div>
+
+            <button type="button" class="btn-primary m-btn-start-practice" onclick="switchSubTab(7, 'practice')">Start practice →</button>
+
+            <div class="m-topic-nav">
+              <button type="button" class="m-nav-btn" onclick="navigateToTopic(6)">← Previous topic</button>
+              <button type="button" class="m-nav-btn hidden">Next →</button>
             </div>
           </div>
         </div>
       </div>
 
     </main>
+  </div>
+
+  <!-- Mobile Bottom Sheet for Corpus Editing -->
+  <div id="m-sheet-overlay" onclick="closeCorpusSheet()"></div>
+  <div id="m-sheet">
+    <div class="m-sheet-header">
+      <span class="m-sheet-title">Corpus Input</span>
+      <button type="button" class="btn-text" onclick="sample()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+          <path d="M21 3v5h-5"></path>
+          <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+          <path d="M8 16H3v5"></path>
+        </svg>
+        Load another sample
+      </button>
+    </div>
+    <textarea id="m-sheet-txt" rows="5" placeholder="Enter text..." oninput="syncCorpusFromSheet()"></textarea>
+    <button type="button" class="btn-primary m-sheet-done-btn" onclick="closeCorpusSheet()">Done</button>
   </div>
 
   <script>
@@ -1265,8 +2236,22 @@
     const tbl = (h, r) => `<table><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr>${r.map(x => `<tr${x.cls ? ` class="${x.cls}"` : ''}>${x.c.map(y => `<td>${y}</td>`).join('')}</tr>`).join('')}</table>`;
     const out = (i, h) => $('o' + i).innerHTML = h;
 
-    // Navigation switching
+    const topicNames = [
+      "Text Processing",
+      "Stop/Stem/Lemma",
+      "BoW & N-Gram",
+      "POS Tagging",
+      "NER",
+      "Word Cloud",
+      "WordNet & Brown",
+      "Lesk WSD"
+    ];
+
+    let currentModuleIndex = 0;
+
+    // Desktop Module Switching
     function switchModule(index) {
+      currentModuleIndex = index;
       document.querySelectorAll('.nav-item-btn').forEach((btn, idx) => {
         btn.classList.toggle('active', idx === index);
       });
@@ -1280,12 +2265,53 @@
       const card = $('mod-' + modIdx);
       const btns = card.querySelectorAll('.subtab-btn');
       btns.forEach(b => {
-        b.classList.toggle('active', b.textContent.toLowerCase() === tabName);
+        const isMatch = b.textContent.toLowerCase().includes(tabName);
+        b.classList.toggle('active', isMatch);
+        b.setAttribute('aria-selected', isMatch);
       });
       const practicePane = $('mod-' + modIdx + '-practice');
       const conceptPane = $('mod-' + modIdx + '-concept');
       if (practicePane) practicePane.style.display = tabName === 'practice' ? 'block' : 'none';
       if (conceptPane) conceptPane.style.display = tabName === 'concept' ? 'block' : 'none';
+    }
+
+    // Accordion toggle on mobile Concept tab
+    function toggleAccordion(btn) {
+      if (window.innerWidth >= 900) return; // Desktop is flat 3 columns
+      const col = btn.closest('.concept-col');
+      const isOpen = col.classList.contains('open');
+      col.classList.toggle('open', !isOpen);
+      btn.setAttribute('aria-expanded', !isOpen);
+    }
+
+    // Corpus Syncing & Bottom Sheet
+    function updateCorpusPreviews(val) {
+      const text = val || $('txt').value;
+      const preview = text.trim().slice(0, 48) + (text.length > 48 ? '…' : '');
+      document.querySelectorAll('.m-corpus-preview').forEach(el => el.textContent = preview);
+      $('m-sheet-txt').value = text;
+    }
+
+    function syncCorpusToMobile(val) {
+      updateCorpusPreviews(val);
+    }
+
+    function syncCorpusFromSheet() {
+      const val = $('m-sheet-txt').value;
+      $('txt').value = val;
+      updateCorpusPreviews(val);
+    }
+
+    function openCorpusSheet() {
+      $('m-sheet-txt').value = $('txt').value;
+      $('m-sheet-overlay').classList.add('active');
+      $('m-sheet').classList.add('active');
+      $('m-sheet-txt').focus();
+    }
+
+    function closeCorpusSheet() {
+      $('m-sheet-overlay').classList.remove('active');
+      $('m-sheet').classList.remove('active');
     }
 
     // Corpus sample loader
@@ -1296,8 +2322,114 @@
     ];
     let si = 0;
     function sample() {
-      $('txt').value = samples[si++ % samples.length];
+      const s = samples[si++ % samples.length];
+      $('txt').value = s;
+      updateCorpusPreviews(s);
     }
+
+    // Visited topics tracker
+    function markTopicVisited(idx) {
+      try {
+        let visited = JSON.parse(sessionStorage.getItem('lexinest_visited') || '[]');
+        if (!visited.includes(idx)) {
+          visited.push(idx);
+          sessionStorage.setItem('lexinest_visited', JSON.stringify(visited));
+        }
+      } catch (e) {}
+      updateVisitedCheckmarks();
+    }
+
+    function updateVisitedCheckmarks() {
+      try {
+        let visited = JSON.parse(sessionStorage.getItem('lexinest_visited') || '[]');
+        for (let i = 0; i < 8; i++) {
+          const chk = $('m-check-' + i);
+          if (chk) chk.classList.toggle('visited', visited.includes(i));
+        }
+      } catch (e) {}
+    }
+
+    // Mobile Navigation & Hash Routing
+    function navigateToTopic(index) {
+      if (index < 0 || index > 7) return;
+      location.hash = '#/topic/' + (index + 1);
+    }
+
+    function navigateToList() {
+      location.hash = '#/';
+    }
+
+    let hasEverShownList = false;
+
+    function handleRoute() {
+      const hash = location.hash || '';
+      const topicMatch = hash.match(/^#\/topic\/([1-8])$/);
+      const isMobile = window.innerWidth < 900;
+
+      if (topicMatch) {
+        const idx = parseInt(topicMatch[1], 10) - 1;
+        currentModuleIndex = idx;
+        markTopicVisited(idx);
+
+        if (isMobile) {
+          document.body.classList.remove('mode-list');
+          document.body.classList.add('mode-topic');
+          $('m-top-title').textContent = topicNames[idx];
+          $('m-top-step').textContent = (idx + 1) + " / 8";
+
+          // Show only this module
+          document.querySelectorAll('.module-card').forEach((card, i) => {
+            card.classList.toggle('active', i === idx);
+          });
+
+          // Mobile always opens on Concept tab, scrolled to top
+          switchSubTab(idx, 'concept');
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        } else {
+          switchModule(idx);
+        }
+      } else {
+        // Screen 1: Topic List (or desktop default)
+        if (isMobile) {
+          document.body.classList.remove('mode-topic');
+          document.body.classList.add('mode-list');
+          updateVisitedCheckmarks();
+
+          const list = document.querySelector('.m-list-animated');
+          if (list && hasEverShownList) {
+            list.classList.add('instant');
+          }
+          hasEverShownList = true;
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        } else {
+          switchModule(currentModuleIndex || 0);
+        }
+      }
+    }
+
+    window.addEventListener('hashchange', handleRoute);
+    window.addEventListener('resize', handleRoute);
+
+    // Initial animation setup
+    (function initListAnimation() {
+      const list = document.querySelector('.m-list-animated');
+      if (!list) return;
+      list.querySelectorAll('.m-item').forEach((el, i) => {
+        el.style.setProperty('--i', i);
+      });
+
+      function play() {
+        if (!list.classList.contains('instant')) {
+          list.classList.add('play');
+        }
+      }
+
+      if (document.getElementById('intro')) {
+        document.addEventListener('lexinest:ready', play, { once: true });
+      } else {
+        play();
+      }
+    })();
 
     // 1. Text Processing
     function tokenize() {
@@ -1557,7 +2689,6 @@
       const w = words(T()).filter(x => !SW.has(x) && x.length > 2),
         f = freq(w).slice(0, 45),
         mx = f[0] ? f[0][1] : 1,
-        // Forest & Cream restrained palette: forest, slate, terracotta, olive
         col = ['#1F4D3A', '#2E6950', '#3E7C6B', '#5B6C9D', '#B5654A', '#8A7A3C', '#9A5B7E'];
       const u = new Set(w).size,
         sn = T().split(/[.!?]+/).filter(x => x.trim()).length;
@@ -1691,7 +2822,9 @@
 
     // Default initialization
     window.addEventListener('DOMContentLoaded', () => {
-      tokenize();
+      updateCorpusPreviews();
+      updateVisitedCheckmarks();
+      handleRoute();
     });
   </script>
 </body>
