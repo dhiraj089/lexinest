@@ -1,136 +1,1605 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>LexiNest – Smart NLP Text Analyzer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<style>
-:root{--bg:#FFF6E5;--card:#FFFDF7;--or:#FF9A3C;--lo:#FFD9A8;--tx:#4a2c0c;--mut:#8a6a45;--bd:#F3CFA0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1d10;--card:#35251a;--lo:#5a3a1a;--tx:#ffe9cc;--mut:#d3b088;--bd:#6b4726}}
-:root[data-theme="dark"]{--bg:#2a1d10;--card:#35251a;--lo:#5a3a1a;--tx:#ffe9cc;--mut:#d3b088;--bd:#6b4726}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
-header{background:linear-gradient(135deg,#FFB767,#FF9A3C);color:#3b1f04;padding:22px 16px;text-align:center}
-header h1{margin:0;font-size:26px}header p{margin:4px 0 0;font-size:14px}
-main{max-width:980px;margin:auto;padding:14px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:14px}
-textarea,input,select{width:100%;padding:9px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
-textarea{min-height:90px}
-button{background:var(--or);color:#3b1f04;border:0;border-radius:20px;padding:8px 16px;margin:4px 4px 0 0;font-weight:600;cursor:pointer}
-button:hover{filter:brightness(1.08)}
-.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px}
-.tab{background:var(--lo);color:var(--tx);white-space:nowrap}.tab.on{background:var(--or);color:#3b1f04}
-.sec{display:none}.sec.on{display:block}
-.info{background:var(--lo);border-radius:10px;padding:10px;font-size:13.5px;margin-bottom:10px}
-.out{margin-top:10px;overflow-x:auto}
-.chip{display:inline-block;background:var(--lo);border:1px solid var(--bd);border-radius:8px;padding:2px 8px;margin:2px;font-size:13.5px}
-.chip small{color:var(--mut);margin-left:4px;font-weight:700}
-table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid var(--bd);padding:5px 8px;text-align:left;font-size:14px}th{background:var(--lo)}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:120px}.row button{flex:0}
-#cloud{text-align:center;line-height:1.3;padding:10px}#cloud span{display:inline-block;margin:3px 8px;font-weight:700}
-.best{background:var(--lo)}
-#creator-badge{position:fixed;bottom:18px;right:18px;z-index:9999;background:linear-gradient(135deg,#FF9A3C,#FFB767);color:#3b1f04;font:700 12.5px/1.4 system-ui,sans-serif;padding:8px 14px;border-radius:20px;box-shadow:0 4px 18px rgba(255,154,60,.45);display:flex;align-items:center;gap:6px;user-select:none;transition:transform .2s,box-shadow .2s;white-space:nowrap}#creator-badge:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 8px 24px rgba(255,154,60,.55)}#creator-badge span{opacity:.75;font-weight:400}
-</style></head><body>
-<header style="position:relative"><h1>🪺 LexiNest</h1><p>Smart NLP Text Analyzer — tokenize, tag, extract, visualise &amp; disambiguate text</p><p style="margin:8px 0 0;font-size:12px;opacity:.7">✍️ Created by <b>Dhiraj Jadhav</b></p></header>
-<div id="creator-badge">✍️ <span>Created by</span> <b>Dhiraj Jadhav</b></div>
-<main>
-<div class="card"><b>Input text</b> (used by every module)
-<textarea id="txt">Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India.</textarea>
-<button onclick="sample()">🔄 Load another sample</button></div>
-<div class="tabs" id="tabs"></div>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LexiNest – Smart NLP Text Analyzer & Educational Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #F8F9FE;
+      --card-bg: #FFFFFF;
+      --sidebar-bg: #FFFFFF;
+      --primary: #7C3AED;
+      --primary-hover: #6D28D9;
+      --primary-light: #F5F3FF;
+      --primary-subtle: #EDE9FE;
+      --primary-glow: rgba(124, 58, 237, 0.15);
+      --purple-border: #DDD6FE;
+      --text-main: #1E1B4B;
+      --text-muted: #64748B;
+      --text-soft: #94A3B8;
+      --border: #E2E8F0;
+      --border-light: #F1F5F9;
+      --success: #10B981;
+      --danger: #EF4444;
+      --shadow-sm: 0 1px 3px rgba(124, 58, 237, 0.05);
+      --shadow-md: 0 4px 16px -2px rgba(124, 58, 237, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 10px 25px -3px rgba(124, 58, 237, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+    }
 
-<div class="sec card" id="s0"><h3>1 · Text Processing</h3>
-<div class="info"><b>Why:</b> Raw text is messy. Tokenization splits it into units, filtration removes noise, and script validation confirms the writing system (vital for multilingual apps, spam &amp; language filters).<br><b>How:</b> Regex splits text into words/sentences; filters drop punctuation &amp; digits; Unicode script properties count characters per script.</div>
-<button onclick="tokenize()">Tokenize</button><button onclick="filt()">Filter (clean)</button>
-<div class="row" style="margin-top:6px"><select id="scr"><option>Latin</option><option>Devanagari</option><option>Arabic</option><option>Cyrillic</option><option>Han</option></select><button onclick="validate()">Validate Script</button></div><div class="out" id="o0"></div></div>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<div class="sec card" id="s1"><h3>2 · Stop Words, Stemming &amp; Lemmatization</h3>
-<div class="info"><b>Why:</b> Search engines and classifiers work better after removing filler words and reducing words to a base form (“running”, “ran” → “run”).<br><b>How:</b> A stop-word list is filtered out; the stemmer chops suffixes by rules (fast, may give non-words like “studi”); the lemmatizer uses irregular-form lookup + rules to return real dictionary words.</div>
-<button onclick="stops()">Remove Stop Words</button><button onclick="stems()">Stemming</button><button onclick="lemmas()">Lemmatization</button><div class="out" id="o1"></div></div>
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
 
-<div class="sec card" id="s2"><h3>3 · Bag of Words &amp; N-Grams</h3>
-<div class="info"><b>Why:</b> Models need numbers. BoW counts words for classification/spam detection; N-grams keep word order for autocomplete, plagiarism and language models.<br><b>How:</b> BoW = frequency of each unique word. N-gram = sliding window of N consecutive tokens.</div>
-<div class="row"><button onclick="bow()">Show BoW</button><select id="n"><option value="2">Bigram (2)</option><option value="1">Unigram (1)</option><option value="3">Trigram (3)</option><option value="4">4-gram</option></select><button onclick="ngram()">Show N-Gram</button></div><div class="out" id="o2"></div></div>
+    /* Fixed floating badge */
+    #creator-badge {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+      background: #FFFFFF;
+      color: var(--primary);
+      border: 1px solid var(--purple-border);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: default;
+    }
+    #creator-badge:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(124, 58, 237, 0.22);
+      border-color: var(--primary);
+    }
+    #creator-badge .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--primary);
+    }
 
-<div class="sec card" id="s3"><h3>4 · Part-of-Speech Tagging</h3>
-<div class="info"><b>Why:</b> Knowing noun/verb/adjective helps grammar checkers, question answering and information extraction.<br><b>How:</b> Penn-Treebank style tags are assigned using a word lexicon (the, is, and…) plus suffix and capitalization rules (-ing → VBG, -ly → RB).</div>
-<button onclick="pos()">Tag Text</button><div class="out" id="o3"></div></div>
+    /* Top Navigation */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--purple-border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow-sm);
+    }
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #7C3AED, #A855F7);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    }
+    .logo-text h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+    }
+    .logo-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .nav-right-creator {
+      background: var(--primary-light);
+      border: 1px solid var(--purple-border);
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 600;
+    }
 
-<div class="sec card" id="s4"><h3>5 · Named Entity Recognition</h3>
-<div class="info"><b>Why:</b> Pulls out people, places, organizations, dates and money — used in news analysis, resume parsing and chatbots.<br><b>How:</b> Capitalized-word chunks are classified using gazetteers (known places/orgs) and title cues (Dr., Mr.); regex patterns catch dates, money, percentages and emails.</div>
-<button onclick="ner()">Extract Entities</button><div class="out" id="o4"></div></div>
+    /* Main Container Layout */
+    .app-layout {
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 24px;
+      align-items: start;
+      flex: 1;
+    }
 
-<div class="sec card" id="s5"><h3>6 · Exploratory Data Analysis (Word Cloud)</h3>
-<div class="info"><b>Why:</b> A quick visual of what a document is about — used in survey, review and social-media analysis.<br><b>How:</b> Stop words are removed, words counted, and font size is scaled by frequency.</div>
-<button onclick="cloud()">Generate Word Cloud</button><div class="out" id="o5"></div></div>
+    @media (max-width: 992px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+    }
 
-<div class="sec card" id="s6"><h3>7 · WordNet (Synonyms, Antonyms) &amp; Brown Corpus</h3>
-<div class="info"><b>Why:</b> Lexical databases power search-query expansion, thesaurus tools and semantic similarity. A corpus gives real-usage statistics.<br><b>How:</b> A mini WordNet-style dictionary returns synonym sets (synsets) and antonyms; a mini Brown-style corpus (news, fiction, science) gives word frequency &amp; concordance lines.</div>
-<div class="row"><input id="w" value="good" placeholder="Enter a word"><button onclick="wn('syn')">Synonyms</button><button onclick="wn('ant')">Antonyms</button><button onclick="brown()">Brown Corpus</button></div><div class="out" id="o6"></div></div>
+    /* Left Sidebar: Vertical Tabs */
+    .sidebar {
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 16px;
+      position: sticky;
+      top: 90px;
+    }
+    .sidebar-header {
+      padding: 8px 8px 14px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 12px;
+    }
+    .sidebar-header h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
 
-<div class="sec card" id="s7"><h3>8 · Word Sense Disambiguation (Lesk)</h3>
-<div class="info"><b>Why:</b> “bank” can mean money or river. WSD picks the right meaning for translation, search and voice assistants.<br><b>How:</b> Simplified Lesk counts overlapping words between the sentence context and each sense's definition; the sense with the highest overlap wins.</div>
-<input id="ls" value="I deposited money at the bank to open a savings account"><div class="row" style="margin-top:6px"><select id="lw"></select><button onclick="lesk()">Disambiguate</button></div><div class="out" id="o7"></div></div>
-</main>
-<script>
-const $=s=>document.getElementById(s),T=()=>$('txt').value,E=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-const SW=new Set("a an the and or but if of at by for with to from in on is are was were be been am it its he she they we you i me my his her their our this that these those as so than then there here not no do does did have has had will would can could should may might into over near about very just also which who what when".split(" "));
-const words=t=>t.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g)||[];
-const toks=t=>t.match(/[A-Za-z]+(?:'[a-z]+)?|\d+(?:[.,]\d+)*|[^\sA-Za-z\d]/g)||[];
-const chip=(a,b)=>`<span class="chip">${E(a)}${b!=null?`<small>${E(b)}</small>`:''}</span>`;
-const tbl=(h,r)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr${x.cls?` class="${x.cls}"`:''}>${x.c.map(y=>`<td>${y}</td>`).join('')}</tr>`).join('')}</table>`;
-const out=(i,h)=>$('o'+i).innerHTML=h;
-const names=["Text Processing","Stop/Stem/Lemma","BoW & N-Gram","POS Tagging","NER","Word Cloud","WordNet & Brown","Lesk WSD"];
-names.forEach((n,i)=>{const b=document.createElement('button');b.className='tab';b.textContent=(i+1)+'. '+n;b.onclick=()=>show(i);$('tabs').appendChild(b)});
-function show(i){document.querySelectorAll('.sec').forEach((s,j)=>s.classList.toggle('on',i==j));document.querySelectorAll('.tab').forEach((s,j)=>s.classList.toggle('on',i==j))}show(0);
-const samples=["Prof. Anita Desai visited Microsoft in London on 2 June 2025 and earned €5000. The bat flew over the river bank at night. Sales grew 12% in Delhi!","Elon Musk announced that Tesla will open a factory in India. The players were playing cricket happily, and the mouse ran quickly across the floor."];let si=0;
-function sample(){$('txt').value=samples[si++%2]}
-// 1
-function tokenize(){const t=T(),sents=t.split(/(?<=[.!?])\s+(?=[A-Z])/),w=toks(t);out(0,`<b>${w.length} tokens · ${sents.length} sentences</b><br>${w.map(x=>chip(x)).join('')}<hr>${sents.map((s,i)=>`<div>${i+1}. ${E(s)}</div>`).join('')}`)}
-function filt(){const t=T(),w=toks(t),k=w.filter(x=>/^[A-Za-z]/.test(x)).map(x=>x.toLowerCase());out(0,`<b>Removed:</b> ${w.length-k.length} punctuation/number tokens; lower-cased the rest.<br>${k.map(x=>chip(x)).join('')}`)}
-function validate(){const s=$('scr').value,re=new RegExp(`\\p{Script=${s}}`,'u'),t=T();let cnt={},tot=0;for(const c of t){if(/[\s\d\p{P}\p{S}]/u.test(c))continue;tot++;for(const sc of['Latin','Devanagari','Arabic','Cyrillic','Han'])if(new RegExp(`\\p{Script=${sc}}`,'u').test(c)){cnt[sc]=(cnt[sc]||0)+1;break}}
-const ok=(cnt[s]||0)===tot&&tot>0;out(0,`<b style="color:${ok?'#2f7d32':'#c0392b'}">${ok?'✅ Valid':'❌ Not valid'} ${s} text</b><br>`+tbl(['Script','Letters'],Object.entries(cnt).map(([a,b])=>({c:[a,b+' ('+Math.round(b/tot*100)+'%)']}))))}
-// 2
-function stem(w){if(w.length<4)return w;const R=[['sses','ss'],['ies','i'],['ational','ate'],['ization','ize'],['fulness','ful'],['ousness','ous'],['ing',''],['edly',''],['ed',''],['ly',''],['ment',''],['ness',''],['ers','er'],['es',''],['s','']];
-for(const[s,r]of R){if(w.endsWith(s)&&!(s=='s'&&/ss$/.test(w))){let b=w.slice(0,-s.length)+r;if(b.length<3||!/[aeiouy]/.test(b))continue;if((s=='ing'||s=='ed')&&/([^aeiouls])\1$/.test(b))b=b.slice(0,-1);w=b;break}}
-if(w.length>4&&w.endsWith('e'))w=w.slice(0,-1);if(w.length>2&&w.endsWith('y'))w=w.slice(0,-1)+'i';return w}
-const IRR={went:'go',gone:'go',was:'be',were:'be',is:'be',are:'be',been:'be',children:'child',better:'good',best:'good',mice:'mouse',ran:'run',saw:'see',took:'take',has:'have',had:'have',men:'man',women:'woman',feet:'foot',gave:'give',ate:'eat',wrote:'write',flew:'fly',grew:'grow',did:'do',does:'do',bought:'buy',people:'person'};
-function lem(w){if(IRR[w])return IRR[w];if(w.length<4)return w;
-if(/ies$/.test(w))return w.slice(0,-3)+'y';
-if(/(ing|ed)$/.test(w)){let b=w.replace(/(ing|ed)$/,'');if(b.length<3)return w;if(/([^aeiouls])\1$/.test(b))return b.slice(0,-1);if(/[^aeiou][aeiou][^aeiouwxy]$/.test(b)&&b.length<=5)return b+'e';return b}
-if(/(sses|xes|ches|shes)$/.test(w))return w.slice(0,-2);if(/[^s]s$/.test(w)&&!/(us|is)$/.test(w))return w.slice(0,-1);return w}
-function stops(){const w=words(T()),k=w.filter(x=>!SW.has(x)),r=w.filter(x=>SW.has(x));out(1,`<b>Kept (${k.length}):</b><br>${k.map(x=>chip(x)).join('')}<br><b>Removed (${r.length}):</b><br>${r.map(x=>chip(x)).join('')}`)}
-function stems(){const w=[...new Set(words(T()).filter(x=>!SW.has(x)))];out(1,tbl(['Word','Stem'],w.map(x=>({c:[x,'<b>'+stem(x)+'</b>']}))))}
-function lemmas(){const w=[...new Set(words(T()).filter(x=>!SW.has(x)))];out(1,tbl(['Word','Stem','Lemma'],w.map(x=>({c:[x,stem(x),'<b>'+lem(x)+'</b>']}))))}
-// 3
-const freq=a=>{const m={};a.forEach(x=>m[x]=(m[x]||0)+1);return Object.entries(m).sort((a,b)=>b[1]-a[1])};
-function bow(){const f=freq(words(T()));out(2,`<b>Vocabulary size: ${f.length}</b><br>`+tbl(['Word','Count'],f.map(([a,b])=>({c:[a,b]}))))}
-function ngram(){const n=+$('n').value,w=words(T()),g=[];for(let i=0;i+n<=w.length;i++)g.push(w.slice(i,i+n).join(' '));out(2,`<b>${g.length} ${n}-grams</b><br>`+freq(g).map(([a,b])=>chip(a,b>1?'×'+b:null)).join(''))}
-// 4
-const DT="the a an this that these those my your his her its our their some any each every no".split(" "),IN="of in on at by for with from into over near about under after before between through during".split(" "),PR="i you he she it we they me him us them".split(" "),CC=["and","or","but","nor","so","yet"],MD="can could will would should may might must".split(" "),BE={is:'VBZ',are:'VBP',am:'VBP',was:'VBD',were:'VBD',be:'VB',been:'VBN',has:'VBZ',have:'VBP',had:'VBD',do:'VBP',does:'VBZ',did:'VBD'};
-function tag(w,i,all){if(/^\d/.test(w))return'CD';if(/^[^\w]$/.test(w))return'PUNCT';const l=w.toLowerCase();if(DT.includes(l))return'DT';if(IN.includes(l))return'IN';if(PR.includes(l))return'PRP';if(CC.includes(l))return'CC';if(MD.includes(l))return'MD';if(l=='to')return'TO';if(BE[l])return BE[l];
-if(/^[A-Z]/.test(w)&&i>0&&!/[.!?]/.test(all[i-1]))return'NNP';if(/ing$/.test(l))return'VBG';if(/ed$/.test(l)||IRR[l]&&/^(ran|saw|took|gave|ate|wrote|flew|grew|went|bought)$/.test(l))return'VBD';if(/ly$/.test(l))return'RB';if(/(ous|ful|ive|al|able|ic|less)$/.test(l)||['good','bad','big','small','recent'].includes(l))return'JJ';if(/(loves|hates|joins|grows|has)$/.test(l))return'VBZ';if(/s$/.test(l)&&l.length>3)return'NNS';return'NN'}
-function pos(){const t=toks(T());out(3,t.map((w,i)=>chip(w,tag(w,i,t))).join('')+'<br><small>NN noun · NNS plural · NNP proper · VBD past · VBG -ing · VBZ 3rd-person · JJ adjective · RB adverb · DT determiner · IN preposition · PRP pronoun · CD number · MD modal</small>')}
-// 5
-const GPE="India Mumbai Thane Delhi London Paris Pune Bangalore Tokyo USA China Germany Japan France Maharashtra Europe".split(" "),ORG="Google Microsoft Amazon Apple Tesla Anthropic Infosys Wipro Meta OpenAI".split(" "),ORGK=/^(Inc|Ltd|Corp|University|Bank|Institute|Company)$/,MON="January February March April May June July August September October November December".split(" ");
-function ner(){const t=T(),ents=[];const rx=[[/[\w.]+@[\w.]+\.\w+/g,'EMAIL'],[/[$€₹£]\s?\d[\d,.]*/g,'MONEY'],[/\d+(?:\.\d+)?\s?%/g,'PERCENT'],[new RegExp(`\\b\\d{1,2}\\s(?:${MON.join('|')})\\s\\d{4}\\b|\\b(?:${MON.join('|')})\\s\\d{1,2},?\\s\\d{4}\\b|\\b(?:${MON.join('|')})\\s\\d{4}\\b`,'g'),'DATE']];
-let rest=t;rx.forEach(([r,l])=>{(t.match(r)||[]).forEach(m=>ents.push([m,l]));rest=rest.replace(r,' ')});
-const re=/(?:(?:Dr|Mr|Mrs|Ms|Prof)\.\s)?[A-Z][a-z]+(?:\s(?:[A-Z][a-z]+))*/g;let m;while(m=re.exec(rest)){let s=m[0],idx=m.index,start=idx==0||/[.!?]\s*$/.test(rest.slice(0,idx));const ws=s.replace(/^(Dr|Mr|Mrs|Ms|Prof)\.\s/,'').split(' '),title=s!==ws.join(' ');
-if(ws.some(x=>ORG.includes(x))||ORGK.test(ws[ws.length-1])&&ws.length>1)ents.push([s,'ORG']);else if(ws.every(x=>GPE.includes(x)))ents.push([s,'GPE']);else if(MON.includes(s))continue;else if(title||(!start&&ws.length>=1&&!/^(The|He|She|It|We|They|I)$/.test(s)))ents.push([s,ws.length>0&&GPE.includes(ws[0])?'GPE':'PERSON']);else if(start&&ws.length>1)ents.push([s,'PERSON'])}
-if(!ents.length)return out(4,'No entities found.');out(4,tbl(['Entity','Type'],ents.map(([a,b])=>({c:[E(a),chip(b)]}))))}
-// 6
-function cloud(){const w=words(T()).filter(x=>!SW.has(x)&&x.length>2),f=freq(w).slice(0,45),mx=f[0]?f[0][1]:1,col=['#E8710A','#FF9A3C','#C2570A','#F5A623','#A0480A','#D9822B'];
-const u=new Set(w).size,sn=T().split(/[.!?]+/).filter(x=>x.trim()).length;
-out(5,`<div id="cloud">${f.sort(()=>Math.random()-.5).map(([a,b])=>`<span title="${b}" style="font-size:${15+38*b/mx}px;color:${col[Math.floor(Math.random()*col.length)]}">${E(a)}</span>`).join('')}</div>`+tbl(['Statistic','Value'],[['Total words (no stop words)',w.length],['Unique words',u],['Lexical diversity',(u/(w.length||1)).toFixed(2)],['Sentences',sn],['Avg word length',(w.join('').length/(w.length||1)).toFixed(1)],['Most frequent',f[0]?f[0][0]+' ('+f[0][1]+')':'-']].map(c=>({c}))))}
-// 7
-const WN=("good;adj;fine,nice,great,well;bad,evil;having desirable qualities|bad;adj;poor,awful,terrible;good;not good|happy;adj;glad,joyful,cheerful;sad,unhappy;feeling pleasure|sad;adj;unhappy,sorrowful,gloomy;happy,glad;feeling sorrow|big;adj;large,huge,great;small,little;of great size|small;adj;little,tiny,minor;big,large;of limited size|fast;adj;quick,rapid,speedy;slow;moving quickly|slow;adj;sluggish,unhurried;fast,quick;moving with low speed|hot;adj;warm,heated,burning;cold,cool;high temperature|cold;adj;cool,chilly,freezing;hot,warm;low temperature|love;verb;adore,cherish,like;hate,dislike;feel deep affection|hate;verb;detest,despise,loathe;love,adore;feel intense dislike|beautiful;adj;pretty,lovely,gorgeous;ugly;pleasing to the senses|smart;adj;clever,intelligent,bright;stupid,dull;mentally quick|begin;verb;start,commence,initiate;end,finish;take the first step|buy;verb;purchase,acquire;sell;obtain for money|rich;adj;wealthy,affluent;poor;having much money|start;verb;begin,commence,launch;stop,end;set in motion|car;noun;auto,automobile,motorcar;;a road vehicle|happy;adj;glad,joyful;sad;content").split('|').map(s=>s.split(';'));
-function wn(k){const w=$('w').value.trim().toLowerCase(),e=WN.filter(x=>x[0]==w);if(!e.length)return out(6,`"${E(w)}" is not in the mini dictionary. Try: ${[...new Set(WN.map(x=>x[0]))].map(x=>chip(x)).join('')}`);
-const L=[...new Set(e.flatMap(x=>x[k=='syn'?2:3].split(',')).filter(Boolean))];out(6,`<b>${k=='syn'?'Synonyms':'Antonyms'} of "${E(w)}"</b> (${e[0][1]}) — <i>${E(e[0][4])}</i><br>${L.length?L.map(x=>chip(x)).join(''):'None found.'}`)}
-const BR={news:"The city council approved the new budget on Monday. Officials said the government will invest more money in schools and roads.",fiction:"She walked slowly along the river and thought about the old house. The night was cold and the wind carried a strange sound.",science:"The experiment showed that the reaction rate increased with temperature. Researchers measured the data and the results were good.",religion:"People gathered at the temple to pray and the community shared food. Faith gave them hope in a good future."};
-function brown(){const w=$('w').value.trim().toLowerCase(),all=words(Object.values(BR).join(' ')),f=freq(all.filter(x=>!SW.has(x))).slice(0,10);
-const conc=Object.entries(BR).flatMap(([c,t])=>t.split(/(?<=\.)\s/).filter(s=>words(s).includes(w)).map(s=>[c,s]));
-out(6,`<b>Mini Brown-style corpus:</b> ${Object.keys(BR).map(c=>chip(c,words(BR[c]).length+' words')).join('')}<br><b>Corpus size:</b> ${all.length} words · <b>"${E(w)}" occurs:</b> ${all.filter(x=>x==w).length}×<br><b>Top words:</b> ${f.map(([a,b])=>chip(a,b)).join('')}<br><b>Concordance for "${E(w)}":</b>${conc.length?tbl(['Category','Sentence'],conc.map(c=>({c:[c[0],E(c[1])]}))):' none — try "good", "river", "cold", "money".'}`)}
-// 8
-const SN={bank:[["financial institution","financial institution that accepts deposits money loan account savings interest"],["river bank","sloping land beside a river water stream shore fishing"]],bat:[["flying mammal","nocturnal flying mammal wings cave night animal"],["sports bat","club used to hit the ball in cricket baseball game player"]],python:[["snake","large snake reptile constricts prey jungle animal"],["programming language","programming language code software developer computer program"]],apple:[["fruit","edible fruit tree sweet eat orchard juice"],["company","technology company iphone computer software mac"]],mouse:[["rodent","small rodent cheese tail animal pet floor"],["computer device","computer pointing device click cursor screen"]],spring:[["season","season after winter flowers bloom warm weather"],["coil","elastic metal coil device compress bounce"],["water source","natural water source flows ground stream"]],light:[["illumination","brightness lamp sun ray visible illuminate"],["not heavy","not heavy little weight easy carry"]],bass:[["fish","fish freshwater lake fishing catch"],["low sound","low sound music guitar instrument frequency"]]};
-Object.keys(SN).forEach(k=>$('lw').add(new Option(k,k)));
-$('ls').addEventListener('input',()=>{const f=words($('ls').value).find(x=>SN[x]);if(f)$('lw').value=f});
-function lesk(){const w=$('lw').value,c=new Set(words($('ls').value).filter(x=>x!=w&&!SW.has(x)).map(stem));
-const sc=SN[w].map(([n,g])=>{const o=[...new Set(words(g).filter(x=>!SW.has(x)))].filter(x=>c.has(stem(x)));return{n,g,o}}),mx=Math.max(...sc.map(s=>s.o.length)),b=sc.findIndex(s=>s.o.length==mx);
-out(7,`<b>Ambiguous word:</b> ${w}<br>`+tbl(['Sense','Definition','Overlap','Score'],sc.map((s,i)=>({cls:i==b&&mx>0?'best':'',c:[s.n+(i==b&&mx>0?' ✅':''),E(s.g),s.o.join(', ')||'—',s.o.length]})))+`<p><b>Result:</b> ${mx>0?`"${w}" means <b>${sc[b].n}</b> here.`:'No overlap found — add more context words.'}</p>`)}
-</script></body></html>
+    .tabs-table {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .tab-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+    .tab-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--purple-border);
+      transform: translateX(3px);
+    }
+    .tab-btn.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      box-shadow: 0 2px 10px var(--primary-glow);
+    }
+    .tab-btn-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tab-idx {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #F1F5F9;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .tab-btn.active .tab-idx {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+    .tab-info-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .tab-btn.active .tab-info-title {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .tab-info-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .tab-arrow {
+      color: var(--text-soft);
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+    .tab-btn.active .tab-arrow {
+      color: var(--primary);
+      transform: translateX(2px);
+    }
+
+    .sidebar-footer {
+      margin-top: 16px;
+      padding: 14px 10px 6px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .creator-tag-pill {
+      background: #EDE9FE;
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    /* Right Main Content */
+    .content-area {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Global Text Input Bar */
+    .input-card {
+      background: var(--card-bg);
+      border: 1px solid var(--purple-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    .input-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .input-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .section-creator-tag {
+      background: #F5F3FF;
+      color: var(--primary);
+      border: 1px solid var(--purple-border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 85px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      background: #FAF9FE;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.2s ease;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .input-card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .char-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Section Cards */
+    .sec-card {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      animation: fadeIn 0.25s ease-out;
+    }
+    .sec-card.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sec-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .sec-title-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .sec-title h3 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+    .sec-title p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Concept Education Box */
+    .concept-box {
+      background: linear-gradient(180deg, #FAF8FF 0%, #F5F3FF 100%);
+      border: 1px solid var(--purple-border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 22px;
+    }
+    .concept-box-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+    .concept-item {
+      background: #FFFFFF;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #E9D5FF;
+      box-shadow: var(--shadow-sm);
+    }
+    .concept-item-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .concept-item-text {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    /* Interactive Action Toolbar */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      background: #FAF9FE;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+
+    button.btn {
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 10px 18px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+    button.btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px var(--primary-glow);
+    }
+    button.btn-secondary {
+      background: #FFFFFF;
+      color: var(--primary);
+      border: 1px solid var(--purple-border);
+      box-shadow: none;
+    }
+    button.btn-secondary:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    select, input[type="text"] {
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #FFFFFF;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 13.5px;
+      transition: border-color 0.2s;
+    }
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    /* Output Results Area */
+    .out-box {
+      margin-top: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      min-height: 50px;
+      overflow-x: auto;
+    }
+    .out-box:empty {
+      display: none;
+    }
+
+    /* Chips */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--purple-border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin: 3px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .chip:hover {
+      background: #EDE9FE;
+      transform: scale(1.02);
+    }
+    .chip small {
+      color: #6D28D9;
+      background: #DDD6FE;
+      border-radius: 999px;
+      padding: 1px 6px;
+      margin-left: 6px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    /* Tables */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 8px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+    th {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    tr:hover td {
+      background: #FAF8FF;
+    }
+    tr.best td {
+      background: #F3E8FF !important;
+      font-weight: 600;
+    }
+
+    /* Word Cloud */
+    #cloud {
+      text-align: center;
+      line-height: 1.6;
+      padding: 24px 16px;
+      background: #FAF8FF;
+      border-radius: var(--radius-md);
+      border: 1px dashed var(--purple-border);
+      margin-bottom: 14px;
+    }
+    #cloud span {
+      display: inline-block;
+      margin: 4px 10px;
+      font-weight: 700;
+      transition: transform 0.2s;
+      cursor: default;
+    }
+    #cloud span:hover {
+      transform: scale(1.15);
+    }
+
+    /* Section Card Footer */
+    .sec-card-footer {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .footer-right-creator {
+      color: var(--primary);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Sticky Creator Watermark Badge -->
+  <div id="creator-badge">
+    <div class="dot"></div>
+    <span>Created by <b>Dhiraj Jadhav</b></span>
+  </div>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="nav-container">
+      <div class="logo-group">
+        <div class="logo-icon">🪺</div>
+        <div class="logo-text">
+          <h1>LexiNest</h1>
+          <p>Smart NLP Text Analyzer &amp; Interactive Educational Lab</p>
+        </div>
+      </div>
+      <div class="nav-right-creator">
+        <span>✍️ Created by <b>Dhiraj Jadhav</b></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main App Layout: Vertical Sidebar Tabs + Content Area -->
+  <div class="app-layout">
+
+    <!-- Left Sidebar: Vertical Tabs (Table Format) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>NLP Modules &amp; Topics</h2>
+      </div>
+
+      <nav class="tabs-table" id="tabs-container">
+        <!-- Vertical Tab 1 -->
+        <button class="tab-btn active" onclick="switchSection(0)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">1</span>
+            <div>
+              <div class="tab-info-title">Text Processing</div>
+              <div class="tab-info-sub">Tokenize · Filter · Script Check</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+
+        <!-- Vertical Tab 2 -->
+        <button class="tab-btn" onclick="switchSection(1)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">2</span>
+            <div>
+              <div class="tab-info-title">Stop/Stem/Lemma</div>
+              <div class="tab-info-sub">Noise Removal &amp; Root Words</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+
+        <!-- Vertical Tab 3 -->
+        <button class="tab-btn" onclick="switchSection(2)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">3</span>
+            <div>
+              <div class="tab-info-title">BoW &amp; N-Gram</div>
+              <div class="tab-info-sub">Vectorization &amp; Sequences</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+
+        <!-- Vertical Tab 4 -->
+        <button class="tab-btn" onclick="switchSection(3)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">4</span>
+            <div>
+              <div class="tab-info-title">POS Tagging</div>
+              <div class="tab-info-sub">Grammar &amp; Syntactic Roles</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+
+        <!-- Vertical Tab 5 -->
+        <button class="tab-btn" onclick="switchSection(4)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">5</span>
+            <div>
+              <div class="tab-info-title">NER</div>
+              <div class="tab-info-sub">Named Entity Extraction</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+
+        <!-- Vertical Tab 6 -->
+        <button class="tab-btn" onclick="switchSection(5)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">6</span>
+            <div>
+              <div class="tab-info-title">Word Cloud</div>
+              <div class="tab-info-sub">EDA &amp; Visual Analytics</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+
+        <!-- Vertical Tab 7 -->
+        <button class="tab-btn" onclick="switchSection(6)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">7</span>
+            <div>
+              <div class="tab-info-title">WordNet &amp; Brown</div>
+              <div class="tab-info-sub">Lexicon &amp; Corpus Concordance</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+
+        <!-- Vertical Tab 8 -->
+        <button class="tab-btn" onclick="switchSection(7)">
+          <div class="tab-btn-content">
+            <span class="tab-idx">8</span>
+            <div>
+              <div class="tab-info-title">Lesk WSD</div>
+              <div class="tab-info-sub">Word Sense Disambiguation</div>
+            </div>
+          </div>
+          <span class="tab-arrow">→</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>LexiNest Suite</span>
+        <span class="creator-tag-pill">By Dhiraj Jadhav</span>
+      </div>
+    </aside>
+
+    <!-- Right Content Area -->
+    <main class="content-area">
+
+      <!-- Shared Input Card -->
+      <section class="input-card">
+        <div class="input-card-header">
+          <div class="input-title">
+            <span>📝</span> Current Corpus / Text Input
+          </div>
+          <div class="section-creator-tag">
+            <span>✨ Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+        <textarea id="txt" placeholder="Enter custom text for analysis...">Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India.</textarea>
+        <div class="input-card-actions">
+          <button class="btn btn-secondary" onclick="sample()">🔄 Load Another Sample</button>
+          <span class="char-count" id="char-stat">Live input linked to all modules</span>
+        </div>
+      </section>
+
+      <!-- SECTION 1: Text Processing -->
+      <section class="sec-card active" id="sec-0">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 1</span>
+            <h3>1 · Text Processing &amp; Normalization</h3>
+            <p>Fundamental tokenization, noise filtration, and Unicode script verification.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Raw human language contains messy punctuation, whitespace inconsistencies, and formatting. Without tokenization, machines cannot separate words, numbers, or sentences for downstream processing.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ Mechanism</div>
+              <div class="concept-item-text">
+                <b>Tokenization:</b> Uses regex lookaheads to identify word boundaries, punctuation, and sentence stops.<br>
+                <b>Filtration:</b> Strips non-alphanumeric noise and standardizes letter casing.<br>
+                <b>Script Validation:</b> Inspects Unicode script blocks (Latin, Devanagari, Arabic, etc.).
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Multilingual chatbots, input sanitization pipelines, spam classifiers, search indexing engines, and LLM BPE tokenizers.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="action-bar">
+          <button class="btn" onclick="tokenize()">⚡ Tokenize Text</button>
+          <button class="btn btn-secondary" onclick="filt()">🧹 Filter (Clean)</button>
+          <select id="scr" style="margin-left: auto;">
+            <option>Latin</option>
+            <option>Devanagari</option>
+            <option>Arabic</option>
+            <option>Cyrillic</option>
+            <option>Han</option>
+          </select>
+          <button class="btn btn-secondary" onclick="validate()">🌐 Validate Script</button>
+        </div>
+
+        <div class="out-box" id="o0"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Text Processing Engine</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Stop Words, Stemming & Lemmatization -->
+      <section class="sec-card" id="sec-1">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 2</span>
+            <h3>2 · Stop Words, Stemming &amp; Lemmatization</h3>
+            <p>Reducing inflectional forms to root bases to condense vocabulary dimensionality.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Words like <i>"running"</i>, <i>"runs"</i>, and <i>"ran"</i> represent the same semantic action. Combining them reduces vocabulary size and ensures search queries retrieve related variants.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ Stemming vs Lemmatization</div>
+              <div class="concept-item-text">
+                <b>Stemming:</b> Uses heuristic suffix removal (e.g., chops <i>-ing, -ed, -es</i>). Very fast, but can produce non-dictionary roots (e.g. <i>"studi"</i>).<br>
+                <b>Lemmatization:</b> Performs morphological lookup to yield proper dictionary headwords (e.g., <i>"ran"</i> → <i>"run"</i>, <i>"better"</i> → <i>"good"</i>).
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Google Search indexing, document clustering, sentiment classification, legal document discovery, and keyword analysis.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="action-bar">
+          <button class="btn" onclick="stops()">🛑 Remove Stop Words</button>
+          <button class="btn btn-secondary" onclick="stems()">✂️ Stemming (Porter Rules)</button>
+          <button class="btn btn-secondary" onclick="lemmas()">📖 Full Lemmatization</button>
+        </div>
+
+        <div class="out-box" id="o1"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Morphology Engine</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Bag of Words & N-Grams -->
+      <section class="sec-card" id="sec-2">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 3</span>
+            <h3>3 · Bag of Words (BoW) &amp; N-Gram Modeling</h3>
+            <p>Feature representation transforming human sentences into mathematical frequency matrices.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Machine learning models cannot read raw strings; they require numerical vectors. BoW represents text as token counts. N-Grams preserve local word ordering and phrase structure.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ Mechanism</div>
+              <div class="concept-item-text">
+                <b>BoW:</b> Counts occurrences of each unique word irrespective of grammar.<br>
+                <b>N-Gram:</b> Uses a sliding window of size $N$ across contiguous tokens (Bigram = 2 words, Trigram = 3 words).
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Spam filtering (Naive Bayes), predictive text autocomplete, plagiarism checking, and TF-IDF document retrieval.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="action-bar">
+          <button class="btn" onclick="bow()">📊 Generate Bag of Words (BoW)</button>
+          <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
+            <label style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Window Size:</label>
+            <select id="n">
+              <option value="2">Bigram (N = 2)</option>
+              <option value="1">Unigram (N = 1)</option>
+              <option value="3">Trigram (N = 3)</option>
+              <option value="4">4-Gram (N = 4)</option>
+            </select>
+            <button class="btn btn-secondary" onclick="ngram()">🔗 Compute N-Grams</button>
+          </div>
+        </div>
+
+        <div class="out-box" id="o2"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Vectorization Module</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Part-of-Speech Tagging -->
+      <section class="sec-card" id="sec-3">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 4</span>
+            <h3>4 · Part-of-Speech (POS) Tagging</h3>
+            <p>Syntactic disambiguation assigning lexical categories based on context and morphology.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Words can function as different parts of speech based on context (e.g., <i>"book a flight"</i> vs. <i>"read a book"</i>). POS tagging enables machines to understand sentence syntax.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ Mechanism</div>
+              <div class="concept-item-text">
+                Assigns Penn Treebank tags using a core dictionary, morphological affixes (<i>-ly</i> $\to$ Adverb, <i>-ing</i> $\to$ Gerund), auxiliary verb mapping, and capitalization cues for proper nouns.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Grammar checkers (Grammarly), speech synthesis (TTS pitch inflection), machine translation, and dependency parsing.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="action-bar">
+          <button class="btn" onclick="pos()">🏷️ Tag Text with Penn Treebank POS</button>
+        </div>
+
+        <div class="out-box" id="o3"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Syntax Parser</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+      <!-- SECTION 5: Named Entity Recognition -->
+      <section class="sec-card" id="sec-4">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 5</span>
+            <h3>5 · Named Entity Recognition (NER)</h3>
+            <p>Locating and classifying key semantic entities like People, Organizations, Locations, and Quantities.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Extracts structured facts from unstructured text without manual reading. Allows systems to answer <i>"Who did what, where, when, and for how much?"</i>
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ Mechanism</div>
+              <div class="concept-item-text">
+                Combines gazetteer registries (known locations and corporations), honorific detection (Dr., Prof., Mr.), date/money/percentage regexes, and capitalized span chunking.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Resume parsing, financial news intelligence, invoice extraction, cybersecurity threat analysis, and knowledge graph construction.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="action-bar">
+          <button class="btn" onclick="ner()">🔍 Extract Named Entities</button>
+        </div>
+
+        <div class="out-box" id="o4"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Entity Recognition Engine</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Exploratory Data Analysis (Word Cloud) -->
+      <section class="sec-card" id="sec-5">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 6</span>
+            <h3>6 · Exploratory Data Analysis &amp; Word Cloud</h3>
+            <p>Statistical summaries, lexical diversity analysis, and visual frequency typography.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Visualizing top keywords and corpus statistics allows instant thematic understanding of large documents, surveys, customer feedback, and article collections.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ Mechanism</div>
+              <div class="concept-item-text">
+                Computes Lexical Diversity (Unique Tokens / Total Tokens), average word length, sentence counts, and renders an interactive word cloud where font scale correlates directly with occurrence frequency.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Product review sentiment overview, social media trend tracking, political speech analysis, and qualitative survey reporting.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="action-bar">
+          <button class="btn" onclick="cloud()">☁️ Generate Word Cloud &amp; Stats</button>
+        </div>
+
+        <div class="out-box" id="o5"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Analytics Engine</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+      <!-- SECTION 7: WordNet & Brown Corpus -->
+      <section class="sec-card" id="sec-6">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 7</span>
+            <h3>7 · WordNet Semantics &amp; Brown Corpus</h3>
+            <p>Cognitive lexical database lookup and real-world corpus concordance analysis.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Human words share complex semantic networks (synonyms, antonyms, hypernyms). WordNet provides lexical relations, while corpora (like the Brown Corpus) reveal how words occur in real English genres.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ Mechanism</div>
+              <div class="concept-item-text">
+                <b>WordNet:</b> Traverses synset nodes linking concepts and definition glosses.<br>
+                <b>Concordance (KWIC):</b> Extracts Key Word In Context occurrences across News, Fiction, Science, and Religion genres.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Search query expansion, automated paraphrasing, writing assistants, and computational linguistics research.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div class="action-bar">
+          <input type="text" id="w" value="good" placeholder="Enter word (e.g. good, love, big, fast)..." style="width: 220px;">
+          <button class="btn" onclick="wn('syn')">🔗 Synonyms</button>
+          <button class="btn btn-secondary" onclick="wn('ant')">↔️ Antonyms</button>
+          <button class="btn btn-secondary" onclick="brown()">📚 Query Brown Corpus</button>
+        </div>
+
+        <div class="out-box" id="o6"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Lexical Database</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+      <!-- SECTION 8: Word Sense Disambiguation (Lesk) -->
+      <section class="sec-card" id="sec-7">
+        <div class="sec-card-header">
+          <div class="sec-title">
+            <span class="sec-title-badge">Module 8</span>
+            <h3>8 · Word Sense Disambiguation (Lesk Algorithm)</h3>
+            <p>Resolving polysemy and finding the exact contextual meaning of ambiguous words.</p>
+          </div>
+          <div class="section-creator-tag">
+            <span>👤 Created by Dhiraj Jadhav</span>
+          </div>
+        </div>
+
+        <!-- Concept Education Guide -->
+        <div class="concept-box">
+          <div class="concept-box-title">
+            <span>💡</span> Concept Deep Dive: What, Why &amp; How
+          </div>
+          <div class="concept-grid">
+            <div class="concept-item">
+              <div class="concept-item-label">🎯 Why It Matters</div>
+              <div class="concept-item-text">
+                Many words have multiple meanings (polysemy). For instance, <i>"bank"</i> can mean a financial repository or the sloping side of a river. Machines need disambiguation to prevent humorous or erroneous interpretations.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">⚙️ The Lesk Algorithm</div>
+              <div class="concept-item-text">
+                Michael Lesk's algorithm calculates the word-overlap score between the target word's sentence context and candidate dictionary gloss definitions. The sense with the highest overlap is selected as the winning meaning.
+              </div>
+            </div>
+            <div class="concept-item">
+              <div class="concept-item-label">🚀 Real-World Application</div>
+              <div class="concept-item-text">
+                Machine Translation (picking correct translation for "bank" or "crane"), question answering, and conversational AI voice assistants.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Playground -->
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">Test Sentence:</label>
+          <input type="text" id="ls" value="I deposited money at the bank to open a savings account" style="width: 100%;">
+        </div>
+
+        <div class="action-bar">
+          <label style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Target Ambiguous Word:</label>
+          <select id="lw" style="width: 200px;"></select>
+          <button class="btn" onclick="lesk()">🎯 Disambiguate with Lesk</button>
+        </div>
+
+        <div class="out-box" id="o7"></div>
+
+        <div class="sec-card-footer">
+          <span>LexiNest Semantic Disambiguation</span>
+          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Utility helpers
+    const $ = s => document.getElementById(s);
+    const T = () => $('txt').value;
+    const E = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+    const SW = new Set("a an the and or but if of at by for with to from in on is are was were be been am it its he she they we you i me my his her their our this that these those as so than then there here not no do does did have has had will would can could should may might into over near about very just also which who what when".split(" "));
+    const words = t => t.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
+    const toks = t => t.match(/[A-Za-z]+(?:'[a-z]+)?|\d+(?:[.,]\d+)*|[^\sA-Za-z\d]/g) || [];
+    const chip = (a, b) => `<span class="chip">${E(a)}${b != null ? `<small>${E(b)}</small>` : ''}</span>`;
+    const tbl = (h, r) => `<table><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr>${r.map(x => `<tr${x.cls ? ` class="${x.cls}"` : ''}>${x.c.map(y => `<td>${y}</td>`).join('')}</tr>`).join('')}</table>`;
+    const out = (i, h) => {
+      const el = $('o' + i);
+      el.innerHTML = h;
+      el.style.display = 'block';
+    };
+
+    // Tab Switching logic
+    function switchSection(index) {
+      // Update sidebar tab buttons
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === index);
+      });
+
+      // Update section cards
+      for (let i = 0; i < 8; i++) {
+        const sec = $('sec-' + i);
+        if (sec) {
+          sec.classList.toggle('active', i === index);
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Diverse sample loader
+    const samples = [
+      "Prof. Anita Desai visited Microsoft in London on 2 June 2025 and earned €5000. The bat flew over the river bank at night. Sales grew 12% in Delhi! Contact: anita@oxford.ac.uk",
+      "Elon Musk announced that Tesla will open a gigafactory in Mumbai, India with $200000000 investment. The agile team coded Python happily, while prices dropped 8% across stores.",
+      "Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India."
+    ];
+    let si = 0;
+    function sample() {
+      $('txt').value = samples[si++ % samples.length];
+    }
+
+    // 1. Text Processing
+    function tokenize() {
+      const t = T(), sents = t.split(/(?<=[.!?])\s+(?=[A-Z])/), w = toks(t);
+      out(0, `<div style="margin-bottom:12px;font-size:14px;color:var(--primary);font-weight:700;">📊 Extracted ${w.length} tokens across ${sents.length} sentences</div>` +
+        `<div>${w.map(x => chip(x)).join('')}</div>` +
+        `<hr style="margin:14px 0;border:0;border-top:1px solid var(--border);">` +
+        `<b>Sentence Boundaries:</b>` +
+        `<div style="margin-top:6px;">${sents.map((s, i) => `<div style="padding:6px 0;border-bottom:1px dashed var(--border-light);font-size:13.5px;"><span style="color:var(--primary);font-weight:700;margin-right:8px;">${i + 1}.</span>${E(s)}</div>`).join('')}</div>`);
+    }
+
+    function filt() {
+      const t = T(), w = toks(t), k = w.filter(x => /^[A-Za-z]/.test(x)).map(x => x.toLowerCase());
+      out(0, `<div style="margin-bottom:10px;font-size:13.5px;"><b>Filtered Results:</b> Removed <span style="color:var(--danger);font-weight:700;">${w.length - k.length}</span> non-alphabetic/punctuation tokens; lower-cased the remaining words.</div>` +
+        `<div>${k.map(x => chip(x)).join('')}</div>`);
+    }
+
+    function validate() {
+      const s = $('scr').value, t = T();
+      let cnt = {}, tot = 0;
+      for (const c of t) {
+        if (/[\s\d\p{P}\p{S}]/u.test(c)) continue;
+        tot++;
+        for (const sc of ['Latin', 'Devanagari', 'Arabic', 'Cyrillic', 'Han']) {
+          if (new RegExp(`\\p{Script=${sc}}`, 'u').test(c)) {
+            cnt[sc] = (cnt[sc] || 0) + 1;
+            break;
+          }
+        }
+      }
+      const ok = (cnt[s] || 0) === tot && tot > 0;
+      out(0, `<div style="margin-bottom:10px;font-size:14px;font-weight:700;color:${ok ? '#10B981' : '#EF4444'}">${ok ? '✅ Valid' : '❌ Not pure'} ${s} script document (${cnt[s] || 0}/${tot} letters)</div>` +
+        tbl(['Script Family', 'Letter Count / Coverage'], Object.entries(cnt).map(([a, b]) => ({ c: [a, b + ' (' + Math.round(b / tot * 100) + '%)'] }))));
+    }
+
+    // 2. Stop Words, Stemming & Lemmatization
+    function stem(w) {
+      if (w.length < 4) return w;
+      const R = [['sses', 'ss'], ['ies', 'i'], ['ational', 'ate'], ['ization', 'ize'], ['fulness', 'ful'], ['ousness', 'ous'], ['ing', ''], ['edly', ''], ['ed', ''], ['ly', ''], ['ment', ''], ['ness', ''], ['ers', 'er'], ['es', ''], ['s', '']];
+      for (const [s, r] of R) {
+        if (w.endsWith(s) && !(s == 's' && /ss$/.test(w))) {
+          let b = w.slice(0, -s.length) + r;
+          if (b.length < 3 || !/[aeiouy]/.test(b)) continue;
+          if ((s == 'ing' || s == 'ed') && /([^aeiouls])\1$/.test(b)) b = b.slice(0, -1);
+          w = b;
+          break;
+        }
+      }
+      if (w.length > 4 && w.endsWith('e')) w = w.slice(0, -1);
+      if (w.length > 2 && w.endsWith('y')) w = w.slice(0, -1) + 'i';
+      return w;
+    }
+
+    const IRR = { went: 'go', gone: 'go', was: 'be', were: 'be', is: 'be', are: 'be', been: 'be', children: 'child', better: 'good', best: 'good', mice: 'mouse', ran: 'run', saw: 'see', took: 'take', has: 'have', had: 'have', men: 'man', women: 'woman', feet: 'foot', gave: 'give', ate: 'eat', wrote: 'write', flew: 'fly', grew: 'grow', did: 'do', does: 'do', bought: 'buy', people: 'person' };
+
+    function lem(w) {
+      if (IRR[w]) return IRR[w];
+      if (w.length < 4) return w;
+      if (/ies$/.test(w)) return w.slice(0, -3) + 'y';
+      if (/(ing|ed)$/.test(w)) {
+        let b = w.replace(/(ing|ed)$/, '');
+        if (b.length < 3) return w;
+        if (/([^aeiouls])\1$/.test(b)) return b.slice(0, -1);
+        if (/[^aeiou][aeiou][^aeiouwxy]$/.test(b) && b.length <= 5) return b + 'e';
+        return b;
+      }
+      if (/(sses|xes|ches|shes)$/.test(w)) return w.slice(0, -2);
+      if (/[^s]s$/.test(w) && !/(us|is)$/.test(w)) return w.slice(0, -1);
+      return w;
+    }
+
+    function stops() {
+      const w = words(T()), k = w.filter(x => !SW.has(x)), r = w.filter(x => SW.has(x));
+      out(1, `<div style="margin-bottom:12px;"><b>Content Tokens Kept (${k.length}):</b><br>${k.map(x => chip(x)).join('')}</div>` +
+        `<div style="margin-top:10px;"><b>Filter / Stop Words Removed (${r.length}):</b><br>${r.map(x => `<span class="chip" style="background:#FEE2E2;border-color:#FCA5A5;color:#991B1B">${E(x)}</span>`).join('')}</div>`);
+    }
+
+    function stems() {
+      const w = [...new Set(words(T()).filter(x => !SW.has(x)))];
+      out(1, `<div style="margin-bottom:8px;font-weight:700;color:var(--primary);">Heuristic Stemmed Forms (Porter Rules)</div>` +
+        tbl(['Original Token', 'Stemmed Root'], w.map(x => ({ c: [x, `<b style="color:var(--primary)">${stem(x)}</b>`] }))));
+    }
+
+    function lemmas() {
+      const w = [...new Set(words(T()).filter(x => !SW.has(x)))];
+      out(1, `<div style="margin-bottom:8px;font-weight:700;color:var(--primary);">Stemming vs True Dictionary Lemmatization Comparison</div>` +
+        tbl(['Original Word', 'Stem (Heuristic)', 'Lemma (Dictionary Base)'], w.map(x => ({ c: [x, stem(x), `<b style="color:#059669">${lem(x)}</b>`] }))));
+    }
+
+    // 3. Bag of Words & N-Grams
+    const freq = a => {
+      const m = {};
+      a.forEach(x => m[x] = (m[x] || 0) + 1);
+      return Object.entries(m).sort((a, b) => b[1] - a[1]);
+    };
+
+    function bow() {
+      const f = freq(words(T()));
+      out(2, `<div style="margin-bottom:8px;font-size:14px;"><b>Vocabulary Dimension:</b> <span style="color:var(--primary);font-weight:700;">${f.length} unique terms</span></div>` +
+        tbl(['Term / Word', 'Frequency Count'], f.map(([a, b]) => ({ c: [a, `<b style="color:var(--primary)">${b}</b>`] }))));
+    }
+
+    function ngram() {
+      const n = +$('n').value, w = words(T()), g = [];
+      for (let i = 0; i + n <= w.length; i++) g.push(w.slice(i, i + n).join(' '));
+      const ranked = freq(g);
+      out(2, `<div style="margin-bottom:10px;font-size:14px;"><b>Generated ${g.length} contiguous ${n}-grams:</b></div>` +
+        ranked.map(([a, b]) => chip(a, b > 1 ? '×' + b : null)).join(''));
+    }
+
+    // 4. POS Tagging
+    const DT = "the a an this that these those my your his her its our their some any each every no".split(" "),
+      IN = "of in on at by for with from into over near about under after before between through during".split(" "),
+      PR = "i you he she it we they me him us them".split(" "),
+      CC = ["and", "or", "but", "nor", "so", "yet"],
+      MD = "can could will would should may might must".split(" "),
+      BE = { is: 'VBZ', are: 'VBP', am: 'VBP', was: 'VBD', were: 'VBD', be: 'VB', been: 'VBN', has: 'VBZ', have: 'VBP', had: 'VBD', do: 'VBP', does: 'VBZ', did: 'VBD' };
+
+    function tag(w, i, all) {
+      if (/^\d/.test(w)) return 'CD';
+      if (/^[^\w]$/.test(w)) return 'PUNCT';
+      const l = w.toLowerCase();
+      if (DT.includes(l)) return 'DT';
+      if (IN.includes(l)) return 'IN';
+      if (PR.includes(l)) return 'PRP';
+      if (CC.includes(l)) return 'CC';
+      if (MD.includes(l)) return 'MD';
+      if (l == 'to') return 'TO';
+      if (BE[l]) return BE[l];
+      if (/^[A-Z]/.test(w) && i > 0 && !/[.!?]/.test(all[i - 1])) return 'NNP';
+      if (/ing$/.test(l)) return 'VBG';
+      if (/ed$/.test(l) || IRR[l] && /^(ran|saw|took|gave|ate|wrote|flew|grew|went|bought)$/.test(l)) return 'VBD';
+      if (/ly$/.test(l)) return 'RB';
+      if (/(ous|ful|ive|al|able|ic|less)$/.test(l) || ['good', 'bad', 'big', 'small', 'recent'].includes(l)) return 'JJ';
+      if (/(loves|hates|joins|grows|has)$/.test(l)) return 'VBZ';
+      if (/s$/.test(l) && l.length > 3) return 'NNS';
+      return 'NN';
+    }
+
+    function pos() {
+      const t = toks(T());
+      out(3, `<div style="margin-bottom:14px;line-height:2.2;">${t.map((w, i) => chip(w, tag(w, i, t))).join(' ')}</div>` +
+        `<div style="background:#FAF8FF;padding:12px;border-radius:8px;border:1px solid var(--purple-border);font-size:12px;color:var(--text-muted);line-height:1.6;">` +
+        `<b>Penn Treebank POS Reference:</b><br>` +
+        `<b>NN</b>: Noun · <b>NNS</b>: Plural Noun · <b>NNP</b>: Proper Noun · <b>VBZ</b>: Verb 3rd Person · <b>VBD</b>: Past Tense · <b>VBG</b>: Gerund/Present Participle · <b>JJ</b>: Adjective · <b>RB</b>: Adverb · <b>DT</b>: Determiner · <b>IN</b>: Preposition · <b>PRP</b>: Personal Pronoun · <b>CD</b>: Cardinal Number · <b>MD</b>: Modal` +
+        `</div>`);
+    }
+
+    // 5. NER
+    const GPE = "India Mumbai Thane Delhi London Paris Pune Bangalore Tokyo USA China Germany Japan France Maharashtra Europe".split(" "),
+      ORG = "Google Microsoft Amazon Apple Tesla Anthropic Infosys Wipro Meta OpenAI".split(" "),
+      ORGK = /^(Inc|Ltd|Corp|University|Bank|Institute|Company)$/,
+      MON = "January February March April May June July August September October November December".split(" ");
+
+    function ner() {
+      const t = T(), ents = [];
+      const rx = [
+        [/[\w.]+@[\w.]+\.\w+/g, 'EMAIL'],
+        [/[$€₹£]\s?\d[\d,.]*/g, 'MONEY'],
+        [/\d+(?:\.\d+)?\s?%/g, 'PERCENT'],
+        [new RegExp(`\\b\\d{1,2}\\s(?:${MON.join('|')})\\s\\d{4}\\b|\\b(?:${MON.join('|')})\\s\\d{1,2},?\\s\\d{4}\\b|\\b(?:${MON.join('|')})\\s\\d{4}\\b`, 'g'), 'DATE']
+      ];
+      let rest = t;
+      rx.forEach(([r, l]) => {
+        (t.match(r) || []).forEach(m => ents.push([m, l]));
+        rest = rest.replace(r, ' ');
+      });
+      const re = /(?:(?:Dr|Mr|Mrs|Ms|Prof)\.\s)?[A-Z][a-z]+(?:\s(?:[A-Z][a-z]+))*/g;
+      let m;
+      while (m = re.exec(rest)) {
+        let s = m[0], idx = m.index, start = idx == 0 || /[.!?]\s*$/.test(rest.slice(0, idx));
+        const ws = s.replace(/^(Dr|Mr|Mrs|Ms|Prof)\.\s/, '').split(' '), title = s !== ws.join(' ');
+        if (ws.some(x => ORG.includes(x)) || ORGK.test(ws[ws.length - 1]) && ws.length > 1) ents.push([s, 'ORG']);
+        else if (ws.every(x => GPE.includes(x))) ents.push([s, 'GPE']);
+        else if (MON.includes(s)) continue;
+        else if (title || (!start && ws.length >= 1 && !/^(The|He|She|It|We|They|I)$/.test(s))) ents.push([s, ws.length > 0 && GPE.includes(ws[0]) ? 'GPE' : 'PERSON']);
+        else if (start && ws.length > 1) ents.push([s, 'PERSON']);
+      }
+      if (!ents.length) return out(4, '<p style="color:var(--text-muted)">No named entities detected in current text.</p>');
+      out(4, `<div style="margin-bottom:8px;font-weight:700;color:var(--primary);">Detected ${ents.length} Named Entities</div>` +
+        tbl(['Identified Text Span', 'Entity Category'], ents.map(([a, b]) => ({ c: [E(a), chip(b)] }))));
+    }
+
+    // 6. Word Cloud
+    function cloud() {
+      const w = words(T()).filter(x => !SW.has(x) && x.length > 2),
+        f = freq(w).slice(0, 45),
+        mx = f[0] ? f[0][1] : 1,
+        col = ['#7C3AED', '#9333EA', '#6D28D9', '#8B5CF6', '#A855F7', '#5B21B6', '#4C1D95'];
+      const u = new Set(w).size,
+        sn = T().split(/[.!?]+/).filter(x => x.trim()).length;
+
+      out(5, `<div id="cloud">${f.sort(() => Math.random() - .5).map(([a, b]) => `<span title="Frequency: ${b}" style="font-size:${15 + 34 * b / mx}px;color:${col[Math.floor(Math.random() * col.length)]}">${E(a)}</span>`).join('')}</div>` +
+        tbl(['Corpus Metric', 'Calculated Value'], [
+          ['Total Informative Tokens (Stop words excluded)', w.length],
+          ['Unique Vocabulary Count', u],
+          ['Lexical Diversity (Type-Token Ratio)', (u / (w.length || 1)).toFixed(2)],
+          ['Sentence Count', sn],
+          ['Mean Word Length', (w.join('').length / (w.length || 1)).toFixed(1) + ' characters'],
+          ['Dominant Term', f[0] ? f[0][0] + ' (' + f[0][1] + ' occurrences)' : 'N/A']
+        ].map(c => ({ c }))));
+    }
+
+    // 7. WordNet & Brown
+    const WN = ("good;adj;fine,nice,great,well;bad,evil;having desirable qualities|bad;adj;poor,awful,terrible;good;not good|happy;adj;glad,joyful,cheerful;sad,unhappy;feeling pleasure|sad;adj;unhappy,sorrowful,gloomy;happy,glad;feeling sorrow|big;adj;large,huge,great;small,little;of great size|small;adj;little,tiny,minor;big,large;of limited size|fast;adj;quick,rapid,speedy;slow;moving quickly|slow;adj;sluggish,unhurried;fast,quick;moving with low speed|hot;adj;warm,heated,burning;cold,cool;high temperature|cold;adj;cool,chilly,freezing;hot,warm;low temperature|love;verb;adore,cherish,like;hate,dislike;feel deep affection|hate;verb;detest,despise,loathe;love,adore;feel intense dislike|beautiful;adj;pretty,lovely,gorgeous;ugly;pleasing to the senses|smart;adj;clever,intelligent,bright;stupid,dull;mentally quick|begin;verb;start,commence,initiate;end,finish;take the first step|buy;verb;purchase,acquire;sell;obtain for money|rich;adj;wealthy,affluent;poor;having much money|start;verb;begin,commence,launch;stop,end;set in motion|car;noun;auto,automobile,motorcar;;a road vehicle|happy;adj;glad,joyful;sad;content").split('|').map(s => s.split(';'));
+
+    function wn(k) {
+      const w = $('w').value.trim().toLowerCase(), e = WN.filter(x => x[0] == w);
+      if (!e.length) return out(6, `<p style="color:var(--text-muted)">"${E(w)}" is not in the mini lexical repository. Try words like: ${[...new Set(WN.map(x => x[0]))].map(x => chip(x)).join('')}</p>`);
+      const L = [...new Set(e.flatMap(x => x[k == 'syn' ? 2 : 3].split(',')).filter(Boolean))];
+      out(6, `<div style="margin-bottom:8px;font-size:14px;"><b>WordNet Synset for "${E(w)}"</b> (${e[0][1]}) — <i style="color:var(--text-muted);">${E(e[0][4])}</i></div>` +
+        `<div style="margin-top:6px;"><b>${k == 'syn' ? '✨ Synonyms' : '↔️ Antonyms'}:</b><br>${L.length ? L.map(x => chip(x)).join('') : 'None found in repository.'}</div>`);
+    }
+
+    const BR = {
+      news: "The city council approved the new budget on Monday. Officials said the government will invest more money in schools and roads.",
+      fiction: "She walked slowly along the river and thought about the old house. The night was cold and the wind carried a strange sound.",
+      science: "The experiment showed that the reaction rate increased with temperature. Researchers measured the data and the results were good.",
+      religion: "People gathered at the temple to pray and the community shared food. Faith gave them hope in a good future."
+    };
+
+    function brown() {
+      const w = $('w').value.trim().toLowerCase(),
+        all = words(Object.values(BR).join(' ')),
+        f = freq(all.filter(x => !SW.has(x))).slice(0, 10);
+      const conc = Object.entries(BR).flatMap(([c, t]) => t.split(/(?<=\.)\s/).filter(s => words(s).includes(w)).map(s => [c, s]));
+      out(6, `<div style="margin-bottom:8px;"><b>Brown Corpus Genres:</b> ${Object.keys(BR).map(c => chip(c, words(BR[c]).length + ' words')).join('')}</div>` +
+        `<div style="font-size:13.5px;margin-bottom:12px;">Corpus vocabulary size: <b>${all.length} words</b> · Keyword <b>"${E(w)}"</b> frequency: <span style="color:var(--primary);font-weight:700;">${all.filter(x => x == w).length}×</span></div>` +
+        `<b>Concordance Lines (KWIC):</b>` +
+        (conc.length ? tbl(['Genre / Category', 'Matched Sentence in Context'], conc.map(c => ({ c: [`<b>${c[0]}</b>`, E(c[1])] }))) : '<p style="color:var(--text-muted);margin-top:6px;">No sentence matches found for this word. Try: "good", "river", "cold", "money".</p>'));
+    }
+
+    // 8. Lesk WSD
+    const SN = {
+      bank: [
+        ["financial institution", "financial institution that accepts deposits money loan account savings interest"],
+        ["river bank", "sloping land beside a river water stream shore fishing"]
+      ],
+      bat: [
+        ["flying mammal", "nocturnal flying mammal wings cave night animal"],
+        ["sports bat", "club used to hit the ball in cricket baseball game player"]
+      ],
+      python: [
+        ["snake reptile", "large snake reptile constricts prey jungle animal"],
+        ["programming language", "programming language code software developer computer program"]
+      ],
+      apple: [
+        ["edible fruit", "edible fruit tree sweet eat orchard juice"],
+        ["technology company", "technology company iphone computer software mac"]
+      ],
+      mouse: [
+        ["rodent animal", "small rodent cheese tail animal pet floor"],
+        ["computer pointing device", "computer pointing device click cursor screen"]
+      ],
+      spring: [
+        ["season of year", "season after winter flowers bloom warm weather"],
+        ["elastic coil", "elastic metal coil device compress bounce"],
+        ["water source", "natural water source flows ground stream"]
+      ],
+      light: [
+        ["illumination", "brightness lamp sun ray visible illuminate"],
+        ["not heavy", "not heavy little weight easy carry"]
+      ],
+      bass: [
+        ["freshwater fish", "fish freshwater lake fishing catch"],
+        ["low musical frequency", "low sound music guitar instrument frequency"]
+      ]
+    };
+
+    Object.keys(SN).forEach(k => $('lw').add(new Option(k, k)));
+
+    $('ls').addEventListener('input', () => {
+      const f = words($('ls').value).find(x => SN[x]);
+      if (f) $('lw').value = f;
+    });
+
+    function lesk() {
+      const w = $('lw').value, c = new Set(words($('ls').value).filter(x => x != w && !SW.has(x)).map(stem));
+      const sc = SN[w].map(([n, g]) => {
+        const o = [...new Set(words(g).filter(x => !SW.has(x)))].filter(x => c.has(stem(x)));
+        return { n, g, o };
+      });
+      const mx = Math.max(...sc.map(s => s.o.length));
+      const b = sc.findIndex(s => s.o.length == mx);
+
+      out(7, `<div style="margin-bottom:8px;font-size:14px;"><b>Target Ambiguous Term:</b> <span style="color:var(--primary);font-weight:700;">"${w}"</span></div>` +
+        tbl(['Sense Definition', 'WordNet Concept Gloss', 'Context Overlap Words', 'Score'],
+          sc.map((s, i) => ({
+            cls: i == b && mx > 0 ? 'best' : '',
+            c: [
+              s.n + (i == b && mx > 0 ? ' ✅ (Winner)' : ''),
+              E(s.g),
+              s.o.length ? s.o.map(x => chip(x)).join(' ') : '—',
+              `<b style="color:${i == b && mx > 0 ? 'var(--primary)' : 'var(--text-muted)'}">${s.o.length}</b>`
+            ]
+          }))
+        ) +
+        `<div style="margin-top:14px;padding:12px;background:#FAF8FF;border-radius:8px;border:1px solid var(--purple-border);">` +
+        `<b>Disambiguation Conclusion:</b> ${mx > 0 ? `The algorithm determines that <i>"${w}"</i> refers to <b>${sc[b].n}</b> with an overlap score of ${mx}.` : 'No overlapping lexical tokens found with context. Try adding more context keywords into the sentence.'}` +
+        `</div>`);
+    }
+
+    // Auto-initialize section 0 on load
+    window.addEventListener('DOMContentLoaded', () => {
+      tokenize();
+    });
+  </script>
+</body>
+</html>
