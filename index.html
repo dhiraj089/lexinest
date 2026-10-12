@@ -1302,9 +1302,6 @@
         <span class="brand-sep">/</span>
         <span class="brand-sub">Smart NLP Text Analyzer</span>
       </div>
-      <div class="header-attribution">
-        Created by <strong>Dhiraj Jadhav</strong>
-      </div>
     </div>
   </header>
 
@@ -1423,10 +1420,6 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-9-6"/></svg>
         </span>
       </button>
-
-      <div class="m-list-footer m-item">
-        Created by <strong>Dhiraj Jadhav</strong>
-      </div>
     </div>
   </div>
 
@@ -2306,12 +2299,14 @@
       $('m-sheet-txt').value = $('txt').value;
       $('m-sheet-overlay').classList.add('active');
       $('m-sheet').classList.add('active');
+      document.body.classList.add('sheet-open');
       $('m-sheet-txt').focus();
     }
 
     function closeCorpusSheet() {
       $('m-sheet-overlay').classList.remove('active');
       $('m-sheet').classList.remove('active');
+      document.body.classList.remove('sheet-open');
     }
 
     // Corpus sample loader
@@ -2827,5 +2822,72 @@
       handleRoute();
     });
   </script>
+
+<!-- ============ LEXINEST CREDIT: one link, every page ============ -->
+<a class="lx-credit" id="lxCredit"
+   href="https://www.linkedin.com/in/dhiraj-jadhav-134111371/"
+   target="_blank" rel="noopener noreferrer"
+   aria-label="Created by Dhiraj Jadhav. Opens LinkedIn profile in a new tab">
+  <svg class="lx-in" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/>
+    <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+  </svg>
+  <span class="lx-txt">Created by <b>Dhiraj Jadhav</b></span>
+  <svg class="lx-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M7 17 17 7M8 7h9v9"/>
+  </svg>
+</a>
+
+<style>
+.lx-credit{
+  position:fixed; z-index:60;
+  display:inline-flex; align-items:center; gap:8px;
+  min-height:44px; padding:0 14px;
+  background:#1F4D3A; color:#F6F4EE; text-decoration:none;
+  border:1px solid #D9A441; border-radius:8px;
+  font:500 13px Inter,system-ui,sans-serif; letter-spacing:.01em;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);
+  animation:lxIn .6s ease both, lxPulse 3.2s ease-out 1.5s infinite;
+  transition:background .2s, transform .2s;
+}
+.lx-credit:hover{background:#17392B; transform:translateY(-1px)}
+.lx-credit:active{transform:scale(.98)}
+.lx-credit:focus-visible{outline:2px solid #D9A441; outline-offset:3px}
+.lx-in{width:16px; height:16px; color:#D9A441; flex:none}
+.lx-go{width:14px; height:14px; color:#D9A441; flex:none; transition:transform .2s}
+.lx-credit:hover .lx-go{transform:translate(2px,-2px)}
+.lx-txt b{
+  font-weight:700;
+  background:linear-gradient(110deg,#F6F4EE 0%,#F6F4EE 40%,#F3D58A 50%,#D9A441 55%,#F6F4EE 65%,#F6F4EE 100%);
+  background-size:260% 100%; background-position:120% 0;
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  animation:lxGlint 2.8s ease-in-out 1s infinite;
+}
+@keyframes lxGlint{0%{background-position:120% 0} 60%,100%{background-position:-20% 0}}
+@keyframes lxPulse{0%{box-shadow:0 0 0 0 rgba(217,164,65,.45)} 70%,100%{box-shadow:0 0 0 10px rgba(217,164,65,0)}}
+@keyframes lxIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+/* Desktop: sits in the header's right side */
+@media (min-width:900px){
+  .lx-credit{top:10px; right:24px}
+}
+/* Mobile: centered pill at the bottom, above the home bar */
+@media (max-width:899px){
+  .lx-credit{
+    left:50%; bottom:calc(14px + env(safe-area-inset-bottom));
+    transform:translateX(-50%); animation:lxInM .6s ease both, lxPulse 3.2s ease-out 1.5s infinite;
+  }
+  .lx-credit:hover{transform:translateX(-50%) translateY(-1px)}
+  .lx-credit:active{transform:translateX(-50%) scale(.98)}
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}   /* keeps content clear of the pill */
+  body.sheet-open .lx-credit{display:none}                        /* hide while the corpus bottom sheet is open */
+}
+@keyframes lxInM{from{opacity:0; transform:translate(-50%,8px)} to{opacity:1; transform:translate(-50%,0)}}
+
+@media (prefers-reduced-motion:reduce){
+  .lx-credit,.lx-txt b{animation:none}
+  .lx-txt b{background-position:50% 0}
+}
+</style>
 </body>
 </html>
