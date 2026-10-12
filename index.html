@@ -597,8 +597,15 @@
     </svg>
 
     <h1 class="in-title">LexiNest</h1>
+
+    <!-- Credit directly after the project name -->
+    <div class="in-credit">
+      <span class="in-credit-label">Created by</span>
+      <span class="in-credit-name">Dhiraj Jadhav</span>
+      <span class="in-credit-line"></span>
+    </div>
+
     <p class="in-sub">Smart NLP Text Analyzer &amp; Interactive Educational Lab</p>
-    <p class="in-creator">Created by <strong>Dhiraj Jadhav</strong></p>
 
     <div class="in-sentence" id="inSentence" aria-hidden="true"></div>
     <p class="in-status" id="inStatus" aria-live="polite">Reading text…</p>
@@ -626,29 +633,50 @@
 .in-logo path{animation-delay:.6s}
 @keyframes inDraw{to{stroke-dashoffset:0}}
 .in-title{
-  font:600 clamp(36px,8vw,56px) Fraunces,Georgia,serif; margin:16px 0 4px;
-  opacity:0; transform:translateY(8px); animation:inUp .8s ease 1.2s forwards;
+  font:600 clamp(36px,8vw,56px) Fraunces,Georgia,serif; margin:16px 0 8px;
+  opacity:0; transform:translateY(8px); animation:inUp .8s ease 1s forwards;
 }
 .in-sub{
   font:400 clamp(13px,3.4vw,16px) Inter,system-ui,sans-serif; color:#6B6F69; margin:0;
-  opacity:0; animation:inUp .8s ease 1.7s forwards;
-}
-.in-creator{
-  font:500 clamp(12.5px,3vw,14px) Inter,system-ui,sans-serif; color:#6B6F69; margin:12px 0 0;
-  opacity:0; transform:translateY(8px); animation:inUp .8s ease 2.1s forwards;
-  display:inline-flex; align-items:center; gap:6px;
-}
-.in-creator strong{
-  color:#1F4D3A; font-weight:600;
-  background:rgba(217, 164, 65, 0.18);
-  padding:2px 8px; border-radius:5px;
-  box-shadow:inset 0 0 0 1px rgba(217, 164, 65, 0.35);
+  opacity:0; animation:inUp .8s ease 2.4s forwards;
 }
 @keyframes inUp{to{opacity:1; transform:none}}
 
+/* ===== Created by + glimmer (stays ~7.5s: 1.8s -> 9.4s) ===== */
+.in-credit{
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  margin:0 0 14px;
+  opacity:0; transform:translateY(8px);
+  animation:inUp .9s ease 1.8s forwards;
+}
+.in-credit-label{
+  font:500 11px 'JetBrains Mono',ui-monospace,monospace;
+  letter-spacing:.22em; text-transform:uppercase; color:#6B6F69;
+}
+.in-credit-name{
+  font:600 clamp(20px,5vw,28px) Fraunces,Georgia,serif; letter-spacing:.01em;
+  color:#1F4D3A; /* fallback */
+  background:linear-gradient(110deg,#1F4D3A 0%,#1F4D3A 40%,#F3D58A 50%,#D9A441 54%,#1F4D3A 64%,#1F4D3A 100%);
+  background-size:260% 100%;
+  background-position:120% 0;
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:inGlint 2.4s ease-in-out 2.4s infinite;
+}
+@keyframes inGlint{
+  0%{background-position:120% 0}
+  60%,100%{background-position:-20% 0}
+}
+.in-credit-line{
+  display:block; height:2px; width:0; border-radius:2px;
+  background:linear-gradient(90deg,transparent,#D9A441,transparent);
+  animation:inLine 1.2s ease 2.4s forwards;
+}
+@keyframes inLine{to{width:clamp(120px,36vw,200px)}}
+
 .in-sentence{
   display:flex; flex-wrap:wrap; justify-content:center; gap:10px 6px;
-  margin-top:40px; min-height:92px;
+  margin-top:32px; min-height:92px;
 }
 .in-w{display:flex; flex-direction:column; align-items:center; gap:6px; opacity:0; transform:translateY(6px);
   transition:opacity .4s ease, transform .4s ease}
@@ -664,16 +692,26 @@
 }
 .in-w.tag i{opacity:1}
 .in-status{
-  margin-top:28px; font:500 13px 'JetBrains Mono',ui-monospace,monospace;
+  margin-top:24px; font:500 13px 'JetBrains Mono',ui-monospace,monospace;
   color:#1F4D3A; letter-spacing:.06em; text-transform:uppercase; min-height:20px;
 }
 .in-bar{position:absolute; left:0; right:0; bottom:0; height:3px; background:#E4DFD3}
 .in-bar span{display:block; height:100%; width:0; background:#1F4D3A; animation:inBar 10s linear forwards}
 @keyframes inBar{to{width:100%}}
 
+/* Short phone screens */
+@media (max-height:700px){
+  .in-logo{width:44px; height:44px}
+  .in-sentence{margin-top:20px; min-height:80px}
+  .in-status{margin-top:16px}
+}
+
 @media (prefers-reduced-motion:reduce){
   .in-logo rect,.in-logo path{animation-duration:.01s}
-  .in-w,.in-title,.in-sub,.in-creator{transition:none; animation-duration:.01s}
+  .in-w,.in-title,.in-sub{transition:none; animation-duration:.01s}
+  .in-credit{animation-duration:.01s; animation-delay:0s}
+  .in-credit-name{animation:none; background-position:50% 0}
+  .in-credit-line{animation-duration:.01s; animation-delay:0s}
 }
 </style>
 
@@ -696,10 +734,10 @@
   });
   function at(ms,fn){timers.push(setTimeout(fn,ms))}
 
-  // Timeline (total 10s)
-  els.forEach(function(el,i){ at(2600+i*160,function(){el.classList.add('on')}) });          // words appear
-  at(4800,function(){status.textContent='Tokenizing…'; els.forEach(function(e,i){setTimeout(function(){e.classList.add('tok')},i*70)})});
-  at(6600,function(){status.textContent='Tagging parts of speech…'; els.forEach(function(e,i){setTimeout(function(){e.classList.add('tag')},i*70)})});
+  // Timeline (total ~10s). Credit is visible from 1.8s to 9.4s (~7.5s)
+  els.forEach(function(el,i){ at(3000+i*150,function(){el.classList.add('on')}) });
+  at(5000,function(){status.textContent='Tokenizing…'; els.forEach(function(e,i){setTimeout(function(){e.classList.add('tok')},i*70)})});
+  at(6700,function(){status.textContent='Tagging parts of speech…'; els.forEach(function(e,i){setTimeout(function(){e.classList.add('tag')},i*70)})});
   at(8400,function(){status.textContent='Preparing your lab…'});
   at(9400,finish);
 
@@ -709,7 +747,7 @@
     intro.classList.add('hide');
     document.body.style.overflow='';
     setTimeout(function(){intro.remove()},700);
-    document.dispatchEvent(new Event('lexinest:ready'));   // optional hook for your app
+    document.dispatchEvent(new Event('lexinest:ready'));
   }
   document.getElementById('introSkip').addEventListener('click',finish);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') finish(); });
