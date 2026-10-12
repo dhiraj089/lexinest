@@ -2,35 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>LexiNest – Smart NLP Text Analyzer & Educational Lab</title>
+  <title>LexiNest — Smart NLP Text Analyzer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #F8F9FE;
-      --card-bg: #FFFFFF;
-      --sidebar-bg: #FFFFFF;
-      --primary: #7C3AED;
-      --primary-hover: #6D28D9;
-      --primary-light: #F5F3FF;
-      --primary-subtle: #EDE9FE;
-      --primary-glow: rgba(124, 58, 237, 0.15);
-      --purple-border: #DDD6FE;
-      --text-main: #1E1B4B;
-      --text-muted: #64748B;
-      --text-soft: #94A3B8;
-      --border: #E2E8F0;
-      --border-light: #F1F5F9;
-      --success: #10B981;
-      --danger: #EF4444;
-      --shadow-sm: 0 1px 3px rgba(124, 58, 237, 0.05);
-      --shadow-md: 0 4px 16px -2px rgba(124, 58, 237, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
-      --shadow-lg: 0 10px 25px -3px rgba(124, 58, 237, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
+      --bg: #F6F4EE;
+      --surface: #FFFFFF;
+      --border: #E4DFD3;
+      --primary: #1F4D3A;
+      --primary-hover: #17392B;
+      --accent: #D9A441;
+      --text: #1C1F1D;
+      --text-muted: #6B6F69;
+
+      /* Muted tag colors with ~12% background tint */
+      --tag-1: #3E7C6B; /* teal */
+      --tag-2: #B5654A; /* terracotta */
+      --tag-3: #5B6C9D; /* slate blue */
+      --tag-4: #8A7A3C; /* olive */
+      --tag-5: #9A5B7E; /* plum */
     }
 
     * {
@@ -41,1210 +34,1050 @@
 
     body {
       background-color: var(--bg);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Fixed floating badge */
-    #creator-badge {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-      background: #FFFFFF;
-      color: var(--primary);
-      border: 1px solid var(--purple-border);
-      font-weight: 700;
-      font-size: 13px;
-      padding: 9px 16px;
-      border-radius: 999px;
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: default;
-    }
-    #creator-badge:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 12px 28px rgba(124, 58, 237, 0.22);
-      border-color: var(--primary);
-    }
-    #creator-badge .dot {
-      width: 8px;
-      height: 8px;
-      background: var(--primary);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--primary);
-    }
-
-    /* Top Navigation */
+    /* Top Navigation (64px) */
     header {
-      background: #FFFFFF;
-      border-bottom: 1px solid var(--purple-border);
+      height: 64px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      z-index: 1000;
-      box-shadow: var(--shadow-sm);
+      z-index: 100;
     }
-    .nav-container {
-      max-width: 1440px;
+    .header-inner {
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 14px 24px;
+      height: 100%;
+      padding: 0 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
     }
-    .logo-group {
+    .brand {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .logo-icon {
-      width: 42px;
-      height: 42px;
-      background: linear-gradient(135deg, #7C3AED, #A855F7);
-      border-radius: 12px;
+    .brand-icon {
+      color: var(--primary);
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
     }
-    .logo-text h1 {
+    .brand-title {
+      font-family: 'Fraunces', Georgia, serif;
       font-size: 20px;
-      font-weight: 800;
-      color: var(--text-main);
-      letter-spacing: -0.5px;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: -0.2px;
     }
-    .logo-text p {
-      font-size: 12px;
+    .brand-sep {
+      color: var(--border);
+      margin: 0 4px;
+    }
+    .brand-sub {
       color: var(--text-muted);
+      font-size: 13px;
+    }
+    .header-attribution {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .header-attribution strong {
+      color: var(--text);
       font-weight: 500;
     }
-    .nav-right-creator {
-      background: var(--primary-light);
-      border: 1px solid var(--purple-border);
-      padding: 6px 14px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: var(--primary);
-      font-weight: 600;
-    }
 
-    /* Main Container Layout */
-    .app-layout {
-      max-width: 1440px;
+    /* Main Container (1280px max) */
+    .app-container {
+      max-width: 1280px;
       margin: 0 auto;
       width: 100%;
-      padding: 24px;
       display: grid;
-      grid-template-columns: 340px 1fr;
-      gap: 24px;
-      align-items: start;
+      grid-template-columns: 240px 1fr;
       flex: 1;
     }
 
-    @media (max-width: 992px) {
-      .app-layout {
-        grid-template-columns: 1fr;
-      }
+    /* Sidebar: flat list with 1px right border, no card container */
+    aside.sidebar {
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      background: transparent;
     }
-
-    /* Left Sidebar: Vertical Tabs */
-    .sidebar {
-      background: var(--sidebar-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-      padding: 16px;
-      position: sticky;
-      top: 90px;
+    .sidebar-group {
+      margin-bottom: 24px;
     }
-    .sidebar-header {
-      padding: 8px 8px 14px;
-      border-bottom: 1px solid var(--border-light);
-      margin-bottom: 12px;
-    }
-    .sidebar-header h2 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-muted);
+    .sidebar-group-title {
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.8px;
+      color: var(--text-muted);
+      padding: 0 20px 8px;
     }
-
-    .tabs-table {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .nav-list {
+      list-style: none;
     }
-
-    .tab-btn {
+    .nav-item-btn {
       width: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 14px;
+      gap: 10px;
+      padding: 9px 20px;
       background: transparent;
-      border: 1px solid transparent;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      text-align: left;
+      border: none;
+      border-left: 3px solid transparent;
+      color: var(--text);
       font-family: inherit;
-      transition: all 0.2s ease;
-      color: var(--text-main);
+      font-size: 13.5px;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.15s, color 0.15s;
     }
-    .tab-btn:hover {
-      background: var(--primary-light);
-      border-color: var(--purple-border);
-      transform: translateX(3px);
+    .nav-item-btn:hover {
+      background-color: rgba(31, 77, 58, 0.03);
+      color: var(--primary);
     }
-    .tab-btn.active {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      box-shadow: 0 2px 10px var(--primary-glow);
-    }
-    .tab-btn-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .tab-idx {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: #F1F5F9;
-      color: var(--text-muted);
-      font-weight: 700;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-    }
-    .tab-btn.active .tab-idx {
-      background: var(--primary);
-      color: #FFFFFF;
-      box-shadow: 0 2px 8px var(--primary-glow);
-    }
-    .tab-info-title {
-      font-size: 14px;
+    .nav-item-btn.active {
+      border-left-color: var(--primary);
+      background-color: rgba(31, 77, 58, 0.06);
+      color: var(--primary);
       font-weight: 600;
-      color: var(--text-main);
     }
-    .tab-btn.active .tab-info-title {
-      color: var(--primary);
-      font-weight: 700;
-    }
-    .tab-info-sub {
-      font-size: 11px;
+    .nav-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
       color: var(--text-muted);
+      min-width: 18px;
     }
-    .tab-arrow {
-      color: var(--text-soft);
-      font-size: 14px;
-      transition: transform 0.2s;
-    }
-    .tab-btn.active .tab-arrow {
+    .nav-item-btn.active .nav-num {
       color: var(--primary);
-      transform: translateX(2px);
     }
 
-    .sidebar-footer {
-      margin-top: 16px;
-      padding: 14px 10px 6px;
-      border-top: 1px solid var(--border-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .creator-tag-pill {
-      background: #EDE9FE;
-      color: var(--primary);
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11px;
-    }
-
-    /* Right Main Content */
-    .content-area {
+    /* Main Workspace */
+    main.workspace {
+      padding: 24px 32px 48px;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    /* Global Text Input Bar */
-    .input-card {
-      background: var(--card-bg);
-      border: 1px solid var(--purple-border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      box-shadow: var(--shadow-md);
-      position: relative;
+    /* Sticky Corpus Input Panel */
+    .corpus-panel {
+      position: sticky;
+      top: 64px;
+      z-index: 50;
+      background: var(--bg);
+      padding-bottom: 12px;
     }
-    .input-card-header {
+    .corpus-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+    .corpus-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
-    .input-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--primary);
+    .corpus-label {
+      font-size: 12px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
     }
-    .section-creator-tag {
-      background: #F5F3FF;
-      color: var(--primary);
-      border: 1px solid var(--purple-border);
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 85px;
-      padding: 12px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-md);
-      background: #FAF9FE;
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 14px;
-      line-height: 1.6;
-      resize: vertical;
-      transition: all 0.2s ease;
-    }
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: #FFFFFF;
-      box-shadow: 0 0 0 3px var(--primary-glow);
-    }
-
-    .input-card-actions {
+    .corpus-meta {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-top: 10px;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 12px;
     }
-    .char-count {
+    .corpus-note {
       font-size: 12px;
       color: var(--text-muted);
     }
-
-    /* Section Cards */
-    .sec-card {
-      display: none;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-md);
-      animation: fadeIn 0.25s ease-out;
+    .btn-text {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 4px;
     }
-    .sec-card.active {
+    .btn-text:hover {
+      text-decoration: underline;
+      color: var(--primary-hover);
+    }
+    textarea#txt {
+      width: 100%;
+      height: 72px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #FAFAF7;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13.5px;
+      line-height: 1.5;
+      resize: vertical;
+    }
+    textarea#txt:focus {
+      outline: 2px solid var(--primary);
+      background: var(--surface);
+    }
+
+    /* Module Workspace Surface */
+    .module-card {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+    .module-card.active {
       display: block;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .module-card-head {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
     }
-
-    .sec-card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .sec-title-badge {
-      display: inline-block;
-      padding: 4px 10px;
-      background: var(--primary-light);
-      color: var(--primary);
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 6px;
-      margin-bottom: 6px;
-    }
-    .sec-title h3 {
+    .module-title {
+      font-family: 'Fraunces', Georgia, serif;
       font-size: 22px;
-      font-weight: 800;
-      color: var(--text-main);
-      letter-spacing: -0.3px;
-    }
-    .sec-title p {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* Concept Education Box */
-    .concept-box {
-      background: linear-gradient(180deg, #FAF8FF 0%, #F5F3FF 100%);
-      border: 1px solid var(--purple-border);
-      border-radius: var(--radius-md);
-      padding: 18px 20px;
-      margin-bottom: 22px;
-    }
-    .concept-box-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 12px;
-    }
-    .concept-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
-    }
-    .concept-item {
-      background: #FFFFFF;
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid #E9D5FF;
-      box-shadow: var(--shadow-sm);
-    }
-    .concept-item-label {
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--primary);
+      font-weight: 600;
+      color: var(--text);
       margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
-    .concept-item-text {
-      font-size: 13px;
-      color: var(--text-main);
-      line-height: 1.5;
+    .module-desc {
+      color: var(--text-muted);
+      font-size: 13.5px;
     }
 
-    /* Interactive Action Toolbar */
-    .action-bar {
+    /* Sub-tabs: Practice & Concept */
+    .subtabs-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: #FAF9F5;
+      padding: 0 24px;
+      gap: 20px;
+    }
+    .subtab-btn {
+      padding: 10px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .subtab-btn:hover {
+      color: var(--text);
+    }
+    .subtab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab-content {
+      padding: 20px 24px;
+    }
+
+    /* Concept Pane: 3 Columns with Hairline Dividers */
+    .concept-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .concept-col {
+      position: relative;
+    }
+    .concept-col:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: -12px;
+      width: 1px;
+      height: 100%;
+      background: var(--border);
+    }
+    .concept-col-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .concept-col-body {
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Toolbar / Action Row */
+    .toolbar-row {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 18px;
-      background: #FAF9FE;
-      padding: 14px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
     }
 
-    button.btn {
+    /* Button Styling Rules: ONE filled primary button, others outline */
+    .btn-primary {
       background: var(--primary);
       color: #FFFFFF;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 10px 18px;
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      padding: 8px 16px;
       font-family: inherit;
-      font-size: 13.5px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 8px var(--primary-glow);
+      gap: 6px;
+      transition: background-color 0.15s;
     }
-    button.btn:hover {
+    .btn-primary:hover {
       background: var(--primary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px var(--primary-glow);
+      border-color: var(--primary-hover);
     }
-    button.btn-secondary {
-      background: #FFFFFF;
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: border-color 0.15s, background-color 0.15s;
+    }
+    .btn-outline:hover {
+      background: #FAF9F5;
+      border-color: #D3CDC0;
       color: var(--primary);
-      border: 1px solid var(--purple-border);
-      box-shadow: none;
-    }
-    button.btn-secondary:hover {
-      background: var(--primary-light);
-      border-color: var(--primary);
-      transform: translateY(-1px);
     }
 
     select, input[type="text"] {
-      padding: 9px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: #FFFFFF;
-      color: var(--text-main);
+      padding: 7px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
       font-family: inherit;
-      font-size: 13.5px;
-      transition: border-color 0.2s;
+      font-size: 13px;
     }
     select:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px var(--primary-glow);
+      outline: 2px solid var(--primary);
     }
 
-    /* Output Results Area */
-    .out-box {
-      margin-top: 14px;
-      background: #FFFFFF;
+    /* Output Results Display */
+    .output-area {
+      min-height: 48px;
+    }
+
+    /* Stats Row: Large Number + Label */
+    .stats-summary {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      padding: 10px 14px;
+      background: #FAF9F5;
       border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      min-height: 50px;
-      overflow-x: auto;
+      border-radius: 8px;
+      margin-bottom: 14px;
     }
-    .out-box:empty {
-      display: none;
+    .stat-item {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
 
-    /* Chips */
+    /* Token Chips */
+    .chips-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+    }
     .chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      background: #FAFAF7;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
       display: inline-flex;
       align-items: center;
-      background: var(--primary-light);
-      color: var(--primary);
-      border: 1px solid var(--purple-border);
-      border-radius: 999px;
-      padding: 4px 10px;
-      margin: 3px;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.15s ease;
+      gap: 5px;
+      transition: background 0.15s, border-color 0.15s;
     }
     .chip:hover {
-      background: #EDE9FE;
-      transform: scale(1.02);
+      background: #F0ECE1;
+      border-color: #D3CDC0;
     }
     .chip small {
-      color: #6D28D9;
-      background: #DDD6FE;
-      border-radius: 999px;
-      padding: 1px 6px;
-      margin-left: 6px;
-      font-weight: 700;
       font-size: 11px;
+      font-weight: 600;
+      padding: 1px 4px;
+      border-radius: 4px;
     }
 
-    /* Tables */
+    /* Muted Categorical Tag Styles */
+    .tag-teal {
+      color: var(--tag-1);
+      background-color: rgba(62, 124, 107, 0.12);
+      border-color: rgba(62, 124, 107, 0.28);
+    }
+    .tag-terracotta {
+      color: var(--tag-2);
+      background-color: rgba(181, 101, 74, 0.12);
+      border-color: rgba(181, 101, 74, 0.28);
+    }
+    .tag-slate {
+      color: var(--tag-3);
+      background-color: rgba(91, 108, 157, 0.12);
+      border-color: rgba(91, 108, 157, 0.28);
+    }
+    .tag-olive {
+      color: var(--tag-4);
+      background-color: rgba(138, 122, 60, 0.12);
+      border-color: rgba(138, 122, 60, 0.28);
+    }
+    .tag-plum {
+      color: var(--tag-5);
+      background-color: rgba(154, 91, 126, 0.12);
+      border-color: rgba(154, 91, 126, 0.28);
+    }
+
+    /* Clean Output Tables */
     table {
       border-collapse: collapse;
       width: 100%;
-      margin: 8px 0;
-      font-size: 13.5px;
+      margin: 10px 0;
+      font-size: 13px;
     }
     th, td {
       border-bottom: 1px solid var(--border);
-      padding: 10px 12px;
+      padding: 8px 12px;
       text-align: left;
     }
     th {
-      background: var(--primary-light);
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 12px;
+      font-size: 11.5px;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      color: var(--text-muted);
+      background: #FAF9F5;
     }
-    tr:hover td {
-      background: #FAF8FF;
+    td code, td .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
     }
     tr.best td {
-      background: #F3E8FF !important;
-      font-weight: 600;
+      background: rgba(31, 77, 58, 0.06);
+      font-weight: 500;
     }
 
-    /* Word Cloud */
+    /* Word Cloud Container */
     #cloud {
       text-align: center;
-      line-height: 1.6;
-      padding: 24px 16px;
-      background: #FAF8FF;
-      border-radius: var(--radius-md);
-      border: 1px dashed var(--purple-border);
-      margin-bottom: 14px;
+      line-height: 1.7;
+      padding: 20px;
+      background: #FAFAF7;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 16px;
     }
     #cloud span {
       display: inline-block;
-      margin: 4px 10px;
-      font-weight: 700;
-      transition: transform 0.2s;
+      margin: 3px 10px;
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 600;
       cursor: default;
     }
-    #cloud span:hover {
-      transform: scale(1.15);
-    }
 
-    /* Section Card Footer */
-    .sec-card-footer {
-      margin-top: 24px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .footer-right-creator {
-      color: var(--primary);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    /* Responsive: Mobile & Tablet */
+    @media (max-width: 900px) {
+      .app-container {
+        grid-template-columns: 1fr;
+      }
+      aside.sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+        overflow-x: auto;
+      }
+      .sidebar-group {
+        margin-bottom: 0;
+        display: flex;
+        gap: 6px;
+      }
+      .sidebar-group-title {
+        display: none;
+      }
+      .nav-list {
+        display: flex;
+        gap: 6px;
+      }
+      .nav-item-btn {
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        padding: 8px 12px;
+      }
+      .nav-item-btn.active {
+        border-left: none;
+        border-bottom-color: var(--primary);
+      }
+      main.workspace {
+        padding: 16px;
+      }
+      .concept-columns {
+        grid-template-columns: 1fr;
+      }
+      .concept-col:not(:last-child)::after {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating Sticky Creator Watermark Badge -->
-  <div id="creator-badge">
-    <div class="dot"></div>
-    <span>Created by <b>Dhiraj Jadhav</b></span>
-  </div>
-
-  <!-- Top Navigation Header -->
+  <!-- Header (64px) -->
   <header>
-    <div class="nav-container">
-      <div class="logo-group">
-        <div class="logo-icon">🪺</div>
-        <div class="logo-text">
-          <h1>LexiNest</h1>
-          <p>Smart NLP Text Analyzer &amp; Interactive Educational Lab</p>
-        </div>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+            <path d="M6 6h10"></path>
+            <path d="M6 10h10"></path>
+          </svg>
+        </span>
+        <span class="brand-title">LexiNest</span>
+        <span class="brand-sep">/</span>
+        <span class="brand-sub">Smart NLP Text Analyzer</span>
       </div>
-      <div class="nav-right-creator">
-        <span>✍️ Created by <b>Dhiraj Jadhav</b></span>
+      <div class="header-attribution">
+        Created by <strong>Dhiraj Jadhav</strong>
       </div>
     </div>
   </header>
 
-  <!-- Main App Layout: Vertical Sidebar Tabs + Content Area -->
-  <div class="app-layout">
+  <!-- Main Container -->
+  <div class="app-container">
 
-    <!-- Left Sidebar: Vertical Tabs (Table Format) -->
+    <!-- Flat Sidebar List -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <h2>NLP Modules &amp; Topics</h2>
+      <!-- Group 1: Basics -->
+      <div class="sidebar-group">
+        <div class="sidebar-group-title">Basics</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item-btn active" onclick="switchModule(0)">
+              <span class="nav-num">01</span>
+              <span>Text Processing</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item-btn" onclick="switchModule(1)">
+              <span class="nav-num">02</span>
+              <span>Stop/Stem/Lemma</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item-btn" onclick="switchModule(2)">
+              <span class="nav-num">03</span>
+              <span>BoW &amp; N-Gram</span>
+            </button>
+          </li>
+        </ul>
       </div>
 
-      <nav class="tabs-table" id="tabs-container">
-        <!-- Vertical Tab 1 -->
-        <button class="tab-btn active" onclick="switchSection(0)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">1</span>
-            <div>
-              <div class="tab-info-title">Text Processing</div>
-              <div class="tab-info-sub">Tokenize · Filter · Script Check</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
+      <!-- Group 2: Linguistics -->
+      <div class="sidebar-group">
+        <div class="sidebar-group-title">Linguistics</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item-btn" onclick="switchModule(3)">
+              <span class="nav-num">04</span>
+              <span>POS Tagging</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item-btn" onclick="switchModule(4)">
+              <span class="nav-num">05</span>
+              <span>NER</span>
+            </button>
+          </li>
+        </ul>
+      </div>
 
-        <!-- Vertical Tab 2 -->
-        <button class="tab-btn" onclick="switchSection(1)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">2</span>
-            <div>
-              <div class="tab-info-title">Stop/Stem/Lemma</div>
-              <div class="tab-info-sub">Noise Removal &amp; Root Words</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
-
-        <!-- Vertical Tab 3 -->
-        <button class="tab-btn" onclick="switchSection(2)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">3</span>
-            <div>
-              <div class="tab-info-title">BoW &amp; N-Gram</div>
-              <div class="tab-info-sub">Vectorization &amp; Sequences</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
-
-        <!-- Vertical Tab 4 -->
-        <button class="tab-btn" onclick="switchSection(3)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">4</span>
-            <div>
-              <div class="tab-info-title">POS Tagging</div>
-              <div class="tab-info-sub">Grammar &amp; Syntactic Roles</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
-
-        <!-- Vertical Tab 5 -->
-        <button class="tab-btn" onclick="switchSection(4)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">5</span>
-            <div>
-              <div class="tab-info-title">NER</div>
-              <div class="tab-info-sub">Named Entity Extraction</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
-
-        <!-- Vertical Tab 6 -->
-        <button class="tab-btn" onclick="switchSection(5)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">6</span>
-            <div>
-              <div class="tab-info-title">Word Cloud</div>
-              <div class="tab-info-sub">EDA &amp; Visual Analytics</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
-
-        <!-- Vertical Tab 7 -->
-        <button class="tab-btn" onclick="switchSection(6)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">7</span>
-            <div>
-              <div class="tab-info-title">WordNet &amp; Brown</div>
-              <div class="tab-info-sub">Lexicon &amp; Corpus Concordance</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
-
-        <!-- Vertical Tab 8 -->
-        <button class="tab-btn" onclick="switchSection(7)">
-          <div class="tab-btn-content">
-            <span class="tab-idx">8</span>
-            <div>
-              <div class="tab-info-title">Lesk WSD</div>
-              <div class="tab-info-sub">Word Sense Disambiguation</div>
-            </div>
-          </div>
-          <span class="tab-arrow">→</span>
-        </button>
-      </nav>
-
-      <div class="sidebar-footer">
-        <span>LexiNest Suite</span>
-        <span class="creator-tag-pill">By Dhiraj Jadhav</span>
+      <!-- Group 3: Analysis -->
+      <div class="sidebar-group">
+        <div class="sidebar-group-title">Analysis</div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item-btn" onclick="switchModule(5)">
+              <span class="nav-num">06</span>
+              <span>Word Cloud</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item-btn" onclick="switchModule(6)">
+              <span class="nav-num">07</span>
+              <span>WordNet &amp; Brown</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item-btn" onclick="switchModule(7)">
+              <span class="nav-num">08</span>
+              <span>Lesk WSD</span>
+            </button>
+          </li>
+        </ul>
       </div>
     </aside>
 
-    <!-- Right Content Area -->
-    <main class="content-area">
+    <!-- Right Workspace Area -->
+    <main class="workspace">
 
-      <!-- Shared Input Card -->
-      <section class="input-card">
-        <div class="input-card-header">
-          <div class="input-title">
-            <span>📝</span> Current Corpus / Text Input
-          </div>
-          <div class="section-creator-tag">
-            <span>✨ Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-        <textarea id="txt" placeholder="Enter custom text for analysis...">Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India.</textarea>
-        <div class="input-card-actions">
-          <button class="btn btn-secondary" onclick="sample()">🔄 Load Another Sample</button>
-          <span class="char-count" id="char-stat">Live input linked to all modules</span>
-        </div>
-      </section>
-
-      <!-- SECTION 1: Text Processing -->
-      <section class="sec-card active" id="sec-0">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 1</span>
-            <h3>1 · Text Processing &amp; Normalization</h3>
-            <p>Fundamental tokenization, noise filtration, and Unicode script verification.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Raw human language contains messy punctuation, whitespace inconsistencies, and formatting. Without tokenization, machines cannot separate words, numbers, or sentences for downstream processing.
-              </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ Mechanism</div>
-              <div class="concept-item-text">
-                <b>Tokenization:</b> Uses regex lookaheads to identify word boundaries, punctuation, and sentence stops.<br>
-                <b>Filtration:</b> Strips non-alphanumeric noise and standardizes letter casing.<br>
-                <b>Script Validation:</b> Inspects Unicode script blocks (Latin, Devanagari, Arabic, etc.).
-              </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Multilingual chatbots, input sanitization pipelines, spam classifiers, search indexing engines, and LLM BPE tokenizers.
-              </div>
+      <!-- Sticky Corpus Input Panel -->
+      <div class="corpus-panel">
+        <div class="corpus-card">
+          <div class="corpus-header">
+            <span class="corpus-label">Corpus input</span>
+            <div class="corpus-meta">
+              <span class="corpus-note">Linked to all modules</span>
+              <button class="btn-text" onclick="sample()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                  <path d="M21 3v5h-5"></path>
+                  <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                  <path d="M8 16H3v5"></path>
+                </svg>
+                Load another sample
+              </button>
             </div>
           </div>
+          <textarea id="txt" rows="3">Dr. Ravi Sharma joined Google in Mumbai on 15 March 2024 with a salary of $120000. The children were running quickly to the bank near the river. He loves Python programming, but he hates bugs! Contact: ravi@mail.com. Prices rose 5% in India.</textarea>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div class="action-bar">
-          <button class="btn" onclick="tokenize()">⚡ Tokenize Text</button>
-          <button class="btn btn-secondary" onclick="filt()">🧹 Filter (Clean)</button>
-          <select id="scr" style="margin-left: auto;">
-            <option>Latin</option>
-            <option>Devanagari</option>
-            <option>Arabic</option>
-            <option>Cyrillic</option>
-            <option>Han</option>
-          </select>
-          <button class="btn btn-secondary" onclick="validate()">🌐 Validate Script</button>
+      <!-- MODULE 1: Text Processing -->
+      <div class="module-card active" id="mod-0">
+        <div class="module-card-head">
+          <h2 class="module-title">Text Processing</h2>
+          <p class="module-desc">Tokenization, noise filtration, and Unicode writing system validation.</p>
         </div>
-
-        <div class="out-box" id="o0"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Text Processing Engine</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(0, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(0, 'concept')">Concept</button>
         </div>
-      </section>
-
-      <!-- SECTION 2: Stop Words, Stemming & Lemmatization -->
-      <section class="sec-card" id="sec-1">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 2</span>
-            <h3>2 · Stop Words, Stemming &amp; Lemmatization</h3>
-            <p>Reducing inflectional forms to root bases to condense vocabulary dimensionality.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Words like <i>"running"</i>, <i>"runs"</i>, and <i>"ran"</i> represent the same semantic action. Combining them reduces vocabulary size and ensures search queries retrieve related variants.
+        <div class="tab-content">
+          <!-- Practice Pane -->
+          <div class="pane-practice" id="mod-0-practice">
+            <div class="toolbar-row">
+              <button class="btn-primary" onclick="tokenize()">Tokenize text</button>
+              <button class="btn-outline" onclick="filt()">Filter (clean)</button>
+              <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+                <select id="scr">
+                  <option>Latin</option>
+                  <option>Devanagari</option>
+                  <option>Arabic</option>
+                  <option>Cyrillic</option>
+                  <option>Han</option>
+                </select>
+                <button class="btn-outline" onclick="validate()">Validate script</button>
               </div>
             </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ Stemming vs Lemmatization</div>
-              <div class="concept-item-text">
-                <b>Stemming:</b> Uses heuristic suffix removal (e.g., chops <i>-ing, -ed, -es</i>). Very fast, but can produce non-dictionary roots (e.g. <i>"studi"</i>).<br>
-                <b>Lemmatization:</b> Performs morphological lookup to yield proper dictionary headwords (e.g., <i>"ran"</i> → <i>"run"</i>, <i>"better"</i> → <i>"good"</i>).
+            <div class="output-area" id="o0"></div>
+          </div>
+          <!-- Concept Pane -->
+          <div class="pane-concept" id="mod-0-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Raw human language is unstructured and contains punctuation, variable whitespace, and numbers. Without splitting into discrete tokens, computational models cannot index or parse vocabulary.
+                </div>
               </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Google Search indexing, document clustering, sentiment classification, legal document discovery, and keyword analysis.
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  Regex boundaries detect sentence terminators and word breaks. Filters remove punctuation while preserving contraction apostrophes. Unicode script checks count character code blocks against target language scripts.
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Multilingual text routing, spam detection pipelines, search engine crawlers, tokenizer layers in Large Language Models (BPE/WordPiece).
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div class="action-bar">
-          <button class="btn" onclick="stops()">🛑 Remove Stop Words</button>
-          <button class="btn btn-secondary" onclick="stems()">✂️ Stemming (Porter Rules)</button>
-          <button class="btn btn-secondary" onclick="lemmas()">📖 Full Lemmatization</button>
+      <!-- MODULE 2: Stop Words, Stemming & Lemmatization -->
+      <div class="module-card" id="mod-1">
+        <div class="module-card-head">
+          <h2 class="module-title">Stop Words, Stemming &amp; Lemmatization</h2>
+          <p class="module-desc">Isolating semantic content by dropping grammatical noise and normalizing words to root forms.</p>
         </div>
-
-        <div class="out-box" id="o1"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Morphology Engine</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(1, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(1, 'concept')">Concept</button>
         </div>
-      </section>
-
-      <!-- SECTION 3: Bag of Words & N-Grams -->
-      <section class="sec-card" id="sec-2">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 3</span>
-            <h3>3 · Bag of Words (BoW) &amp; N-Gram Modeling</h3>
-            <p>Feature representation transforming human sentences into mathematical frequency matrices.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Machine learning models cannot read raw strings; they require numerical vectors. BoW represents text as token counts. N-Grams preserve local word ordering and phrase structure.
-              </div>
+        <div class="tab-content">
+          <div class="pane-practice" id="mod-1-practice">
+            <div class="toolbar-row">
+              <button class="btn-primary" onclick="stops()">Remove stop words</button>
+              <button class="btn-outline" onclick="stems()">Stemming</button>
+              <button class="btn-outline" onclick="lemmas()">Lemmatization</button>
             </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ Mechanism</div>
-              <div class="concept-item-text">
-                <b>BoW:</b> Counts occurrences of each unique word irrespective of grammar.<br>
-                <b>N-Gram:</b> Uses a sliding window of size $N$ across contiguous tokens (Bigram = 2 words, Trigram = 3 words).
+            <div class="output-area" id="o1"></div>
+          </div>
+          <div class="pane-concept" id="mod-1-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Frequent function words ("the", "is", "at") carry low semantic variance. Consolidating inflected words ("running", "ran" to "run") reduces vocabulary sparsity for search and topic models.
+                </div>
               </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Spam filtering (Naive Bayes), predictive text autocomplete, plagiarism checking, and TF-IDF document retrieval.
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  <b>Stemming:</b> Uses heuristic rules to truncate suffixes (fast, may produce pseudo-stems like "studi").<br>
+                  <b>Lemmatization:</b> Performs morphological lookup to output genuine dictionary base forms.
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Full-text search engines (Elasticsearch, Lucene), keyword indexing, sentiment analyzers, legal document discovery.
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div class="action-bar">
-          <button class="btn" onclick="bow()">📊 Generate Bag of Words (BoW)</button>
-          <div style="display: flex; align-items: center; gap: 8px; margin-left: auto;">
-            <label style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Window Size:</label>
-            <select id="n">
-              <option value="2">Bigram (N = 2)</option>
-              <option value="1">Unigram (N = 1)</option>
-              <option value="3">Trigram (N = 3)</option>
-              <option value="4">4-Gram (N = 4)</option>
-            </select>
-            <button class="btn btn-secondary" onclick="ngram()">🔗 Compute N-Grams</button>
-          </div>
+      <!-- MODULE 3: Bag of Words & N-Gram -->
+      <div class="module-card" id="mod-2">
+        <div class="module-card-head">
+          <h2 class="module-title">Bag of Words &amp; N-Gram</h2>
+          <p class="module-desc">Mathematical representation converting text into token frequency distributions and contiguous sequences.</p>
         </div>
-
-        <div class="out-box" id="o2"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Vectorization Module</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(2, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(2, 'concept')">Concept</button>
         </div>
-      </section>
-
-      <!-- SECTION 4: Part-of-Speech Tagging -->
-      <section class="sec-card" id="sec-3">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 4</span>
-            <h3>4 · Part-of-Speech (POS) Tagging</h3>
-            <p>Syntactic disambiguation assigning lexical categories based on context and morphology.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Words can function as different parts of speech based on context (e.g., <i>"book a flight"</i> vs. <i>"read a book"</i>). POS tagging enables machines to understand sentence syntax.
+        <div class="tab-content">
+          <div class="pane-practice" id="mod-2-practice">
+            <div class="toolbar-row">
+              <button class="btn-primary" onclick="bow()">Show BoW</button>
+              <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+                <label style="font-size: 13px; color: var(--text-muted);">Size:</label>
+                <select id="n">
+                  <option value="2">Bigram (2)</option>
+                  <option value="1">Unigram (1)</option>
+                  <option value="3">Trigram (3)</option>
+                  <option value="4">4-gram (4)</option>
+                </select>
+                <button class="btn-outline" onclick="ngram()">Extract N-grams</button>
               </div>
             </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ Mechanism</div>
-              <div class="concept-item-text">
-                Assigns Penn Treebank tags using a core dictionary, morphological affixes (<i>-ly</i> $\to$ Adverb, <i>-ing</i> $\to$ Gerund), auxiliary verb mapping, and capitalization cues for proper nouns.
+            <div class="output-area" id="o2"></div>
+          </div>
+          <div class="pane-concept" id="mod-2-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Algorithms operate over numerical matrices. BoW creates document-term vectors, while N-grams retain local phrase contexts that unigram frequency drops.
+                </div>
               </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Grammar checkers (Grammarly), speech synthesis (TTS pitch inflection), machine translation, and dependency parsing.
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  BoW aggregates total occurrences per vocabulary entry. N-gram uses a sliding window of width N across ordered tokens (e.g. "river bank" preserves geographic sense).
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Spam classification (Naive Bayes), predictive text autocomplete, plagiarism checking, TF-IDF ranking.
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div class="action-bar">
-          <button class="btn" onclick="pos()">🏷️ Tag Text with Penn Treebank POS</button>
+      <!-- MODULE 4: Part-of-Speech Tagging -->
+      <div class="module-card" id="mod-3">
+        <div class="module-card-head">
+          <h2 class="module-title">Part-of-Speech Tagging</h2>
+          <p class="module-desc">Syntactic classification assigning grammatical parts of speech to tokens in context.</p>
         </div>
-
-        <div class="out-box" id="o3"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Syntax Parser</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(3, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(3, 'concept')">Concept</button>
         </div>
-      </section>
-
-      <!-- SECTION 5: Named Entity Recognition -->
-      <section class="sec-card" id="sec-4">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 5</span>
-            <h3>5 · Named Entity Recognition (NER)</h3>
-            <p>Locating and classifying key semantic entities like People, Organizations, Locations, and Quantities.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Extracts structured facts from unstructured text without manual reading. Allows systems to answer <i>"Who did what, where, when, and for how much?"</i>
-              </div>
+        <div class="tab-content">
+          <div class="pane-practice" id="mod-3-practice">
+            <div class="toolbar-row">
+              <button class="btn-primary" onclick="pos()">Tag text</button>
             </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ Mechanism</div>
-              <div class="concept-item-text">
-                Combines gazetteer registries (known locations and corporations), honorific detection (Dr., Prof., Mr.), date/money/percentage regexes, and capitalized span chunking.
+            <div class="output-area" id="o3"></div>
+          </div>
+          <div class="pane-concept" id="mod-3-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Identical words have different roles depending on context ("to book a hotel" is a verb, "read a book" is a noun). POS tags resolve syntactic ambiguities.
+                </div>
               </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Resume parsing, financial news intelligence, invoice extraction, cybersecurity threat analysis, and knowledge graph construction.
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  Assigns Penn Treebank tags using lexicon lookups, morphological suffix patterns (-ing, -ly, -ous), auxiliary verb tables, and capitalization positions.
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Grammar correction software, Text-to-Speech (TTS) pronunciation, dependency tree parsers, relation extraction.
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div class="action-bar">
-          <button class="btn" onclick="ner()">🔍 Extract Named Entities</button>
+      <!-- MODULE 5: Named Entity Recognition -->
+      <div class="module-card" id="mod-4">
+        <div class="module-card-head">
+          <h2 class="module-title">Named Entity Recognition</h2>
+          <p class="module-desc">Extracting structured real-world entities: persons, locations, organizations, dates, and currency.</p>
         </div>
-
-        <div class="out-box" id="o4"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Entity Recognition Engine</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(4, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(4, 'concept')">Concept</button>
         </div>
-      </section>
-
-      <!-- SECTION 6: Exploratory Data Analysis (Word Cloud) -->
-      <section class="sec-card" id="sec-5">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 6</span>
-            <h3>6 · Exploratory Data Analysis &amp; Word Cloud</h3>
-            <p>Statistical summaries, lexical diversity analysis, and visual frequency typography.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Visualizing top keywords and corpus statistics allows instant thematic understanding of large documents, surveys, customer feedback, and article collections.
-              </div>
+        <div class="tab-content">
+          <div class="pane-practice" id="mod-4-practice">
+            <div class="toolbar-row">
+              <button class="btn-primary" onclick="ner()">Extract entities</button>
             </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ Mechanism</div>
-              <div class="concept-item-text">
-                Computes Lexical Diversity (Unique Tokens / Total Tokens), average word length, sentence counts, and renders an interactive word cloud where font scale correlates directly with occurrence frequency.
+            <div class="output-area" id="o4"></div>
+          </div>
+          <div class="pane-concept" id="mod-4-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Automates facts extraction from documents without requiring human reading, mapping unstructured text into structured database entries.
+                </div>
               </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Product review sentiment overview, social media trend tracking, political speech analysis, and qualitative survey reporting.
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  Combines gazetteers (known organizations, cities, countries), honorific triggers (Dr., Prof.), date/email/money regexes, and capitalized sequence chunks.
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Resume filtering, financial intelligence extraction, biomedical literature analysis, customer support ticket routing.
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div class="action-bar">
-          <button class="btn" onclick="cloud()">☁️ Generate Word Cloud &amp; Stats</button>
+      <!-- MODULE 6: Word Cloud & EDA -->
+      <div class="module-card" id="mod-5">
+        <div class="module-card-head">
+          <h2 class="module-title">Word Cloud &amp; Exploratory Data Analysis</h2>
+          <p class="module-desc">Visual keyword hierarchy and corpus summary statistics.</p>
         </div>
-
-        <div class="out-box" id="o5"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Analytics Engine</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(5, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(5, 'concept')">Concept</button>
         </div>
-      </section>
-
-      <!-- SECTION 7: WordNet & Brown Corpus -->
-      <section class="sec-card" id="sec-6">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 7</span>
-            <h3>7 · WordNet Semantics &amp; Brown Corpus</h3>
-            <p>Cognitive lexical database lookup and real-world corpus concordance analysis.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Human words share complex semantic networks (synonyms, antonyms, hypernyms). WordNet provides lexical relations, while corpora (like the Brown Corpus) reveal how words occur in real English genres.
-              </div>
+        <div class="tab-content">
+          <div class="pane-practice" id="mod-5-practice">
+            <div class="toolbar-row">
+              <button class="btn-primary" onclick="cloud()">Generate word cloud &amp; stats</button>
             </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ Mechanism</div>
-              <div class="concept-item-text">
-                <b>WordNet:</b> Traverses synset nodes linking concepts and definition glosses.<br>
-                <b>Concordance (KWIC):</b> Extracts Key Word In Context occurrences across News, Fiction, Science, and Religion genres.
+            <div class="output-area" id="o5"></div>
+          </div>
+          <div class="pane-concept" id="mod-5-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Provides instantaneous thematic comprehension of texts before running heavy downstream machine learning models.
+                </div>
               </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Search query expansion, automated paraphrasing, writing assistants, and computational linguistics research.
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  Filters stop words, calculates frequency distributions, normalizes font sizes proportionally to maximum frequency, and computes Lexical Diversity (TTR).
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Social media trend monitoring, customer review analysis, survey feedback summaries, content theme auditing.
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div class="action-bar">
-          <input type="text" id="w" value="good" placeholder="Enter word (e.g. good, love, big, fast)..." style="width: 220px;">
-          <button class="btn" onclick="wn('syn')">🔗 Synonyms</button>
-          <button class="btn btn-secondary" onclick="wn('ant')">↔️ Antonyms</button>
-          <button class="btn btn-secondary" onclick="brown()">📚 Query Brown Corpus</button>
+      <!-- MODULE 7: WordNet & Brown Corpus -->
+      <div class="module-card" id="mod-6">
+        <div class="module-card-head">
+          <h2 class="module-title">WordNet &amp; Brown Corpus</h2>
+          <p class="module-desc">Cognitive semantic lexicon lookup and corpus concordance across written genres.</p>
         </div>
-
-        <div class="out-box" id="o6"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Lexical Database</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(6, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(6, 'concept')">Concept</button>
         </div>
-      </section>
-
-      <!-- SECTION 8: Word Sense Disambiguation (Lesk) -->
-      <section class="sec-card" id="sec-7">
-        <div class="sec-card-header">
-          <div class="sec-title">
-            <span class="sec-title-badge">Module 8</span>
-            <h3>8 · Word Sense Disambiguation (Lesk Algorithm)</h3>
-            <p>Resolving polysemy and finding the exact contextual meaning of ambiguous words.</p>
-          </div>
-          <div class="section-creator-tag">
-            <span>👤 Created by Dhiraj Jadhav</span>
-          </div>
-        </div>
-
-        <!-- Concept Education Guide -->
-        <div class="concept-box">
-          <div class="concept-box-title">
-            <span>💡</span> Concept Deep Dive: What, Why &amp; How
-          </div>
-          <div class="concept-grid">
-            <div class="concept-item">
-              <div class="concept-item-label">🎯 Why It Matters</div>
-              <div class="concept-item-text">
-                Many words have multiple meanings (polysemy). For instance, <i>"bank"</i> can mean a financial repository or the sloping side of a river. Machines need disambiguation to prevent humorous or erroneous interpretations.
-              </div>
+        <div class="tab-content">
+          <div class="pane-practice" id="mod-6-practice">
+            <div class="toolbar-row">
+              <input type="text" id="w" value="good" placeholder="Enter word" style="width: 160px;">
+              <button class="btn-primary" onclick="wn('syn')">Synonyms</button>
+              <button class="btn-outline" onclick="wn('ant')">Antonyms</button>
+              <button class="btn-outline" onclick="brown()">Brown corpus</button>
             </div>
-            <div class="concept-item">
-              <div class="concept-item-label">⚙️ The Lesk Algorithm</div>
-              <div class="concept-item-text">
-                Michael Lesk's algorithm calculates the word-overlap score between the target word's sentence context and candidate dictionary gloss definitions. The sense with the highest overlap is selected as the winning meaning.
+            <div class="output-area" id="o6"></div>
+          </div>
+          <div class="pane-concept" id="mod-6-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Captures semantic relationships (synonyms, opposites) beyond exact string matching. Concordance illustrates how words naturally appear in published texts.
+                </div>
               </div>
-            </div>
-            <div class="concept-item">
-              <div class="concept-item-label">🚀 Real-World Application</div>
-              <div class="concept-item-text">
-                Machine Translation (picking correct translation for "bank" or "crane"), question answering, and conversational AI voice assistants.
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  <b>WordNet:</b> Traverses synonym sets (synsets) linked to definitions.<br>
+                  <b>Brown Corpus:</b> Extracts Key Word In Context (KWIC) occurrences across news, fiction, science, and religion genres.
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Search query expansion, automated paraphrasing, lexical thesaurus tools, linguistic research.
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Interactive Playground -->
-        <div style="margin-bottom: 12px;">
-          <label style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">Test Sentence:</label>
-          <input type="text" id="ls" value="I deposited money at the bank to open a savings account" style="width: 100%;">
+      <!-- MODULE 8: Word Sense Disambiguation (Lesk) -->
+      <div class="module-card" id="mod-7">
+        <div class="module-card-head">
+          <h2 class="module-title">Word Sense Disambiguation (Lesk)</h2>
+          <p class="module-desc">Resolving polysemy by measuring overlap between context tokens and dictionary sense definitions.</p>
         </div>
-
-        <div class="action-bar">
-          <label style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Target Ambiguous Word:</label>
-          <select id="lw" style="width: 200px;"></select>
-          <button class="btn" onclick="lesk()">🎯 Disambiguate with Lesk</button>
+        <div class="subtabs-bar">
+          <button class="subtab-btn active" onclick="switchSubTab(7, 'practice')">Practice</button>
+          <button class="subtab-btn" onclick="switchSubTab(7, 'concept')">Concept</button>
         </div>
-
-        <div class="out-box" id="o7"></div>
-
-        <div class="sec-card-footer">
-          <span>LexiNest Semantic Disambiguation</span>
-          <span class="footer-right-creator">Created by Dhiraj Jadhav</span>
+        <div class="tab-content">
+          <div class="pane-practice" id="mod-7-practice">
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">Context sentence:</label>
+              <input type="text" id="ls" value="I deposited money at the bank to open a savings account" style="width: 100%;">
+            </div>
+            <div class="toolbar-row">
+              <label style="font-size: 13px; color: var(--text-muted);">Ambiguous word:</label>
+              <select id="lw" style="width: 180px;"></select>
+              <button class="btn-primary" onclick="lesk()">Disambiguate</button>
+            </div>
+            <div class="output-area" id="o7"></div>
+          </div>
+          <div class="pane-concept" id="mod-7-concept" style="display: none;">
+            <div class="concept-columns">
+              <div class="concept-col">
+                <div class="concept-col-title">Why it matters</div>
+                <div class="concept-col-body">
+                  Words have multiple meanings ("bank" as a financial firm or river edge). Disambiguation prevents incorrect translations and conversational misunderstandings.
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Mechanism</div>
+                <div class="concept-col-body">
+                  Michael Lesk's algorithm stems the context sentence and counts word overlap with each candidate sense definition. The sense with the highest overlap score wins.
+                </div>
+              </div>
+              <div class="concept-col">
+                <div class="concept-col-title">Real-world applications</div>
+                <div class="concept-col-body">
+                  Machine translation, semantic question answering, voice assistant intent resolution.
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
 
     </main>
   </div>
@@ -1258,33 +1091,35 @@
     const SW = new Set("a an the and or but if of at by for with to from in on is are was were be been am it its he she they we you i me my his her their our this that these those as so than then there here not no do does did have has had will would can could should may might into over near about very just also which who what when".split(" "));
     const words = t => t.toLowerCase().match(/[a-z]+(?:'[a-z]+)?/g) || [];
     const toks = t => t.match(/[A-Za-z]+(?:'[a-z]+)?|\d+(?:[.,]\d+)*|[^\sA-Za-z\d]/g) || [];
-    const chip = (a, b) => `<span class="chip">${E(a)}${b != null ? `<small>${E(b)}</small>` : ''}</span>`;
-    const tbl = (h, r) => `<table><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr>${r.map(x => `<tr${x.cls ? ` class="${x.cls}"` : ''}>${x.c.map(y => `<td>${y}</td>`).join('')}</tr>`).join('')}</table>`;
-    const out = (i, h) => {
-      const el = $('o' + i);
-      el.innerHTML = h;
-      el.style.display = 'block';
-    };
 
-    // Tab Switching logic
-    function switchSection(index) {
-      // Update sidebar tab buttons
-      const tabBtns = document.querySelectorAll('.tab-btn');
-      tabBtns.forEach((btn, idx) => {
+    const chip = (a, b, extraClass) => `<span class="chip ${extraClass || ''}">${E(a)}${b != null ? `<small>${E(b)}</small>` : ''}</span>`;
+    const tbl = (h, r) => `<table><tr>${h.map(x => `<th>${x}</th>`).join('')}</tr>${r.map(x => `<tr${x.cls ? ` class="${x.cls}"` : ''}>${x.c.map(y => `<td>${y}</td>`).join('')}</tr>`).join('')}</table>`;
+    const out = (i, h) => $('o' + i).innerHTML = h;
+
+    // Navigation switching
+    function switchModule(index) {
+      document.querySelectorAll('.nav-item-btn').forEach((btn, idx) => {
         btn.classList.toggle('active', idx === index);
       });
-
-      // Update section cards
-      for (let i = 0; i < 8; i++) {
-        const sec = $('sec-' + i);
-        if (sec) {
-          sec.classList.toggle('active', i === index);
-        }
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.querySelectorAll('.module-card').forEach((card, idx) => {
+        card.classList.toggle('active', idx === index);
+      });
     }
 
-    // Diverse sample loader
+    // Subtab switching (Practice vs Concept)
+    function switchSubTab(modIdx, tabName) {
+      const card = $('mod-' + modIdx);
+      const btns = card.querySelectorAll('.subtab-btn');
+      btns.forEach(b => {
+        b.classList.toggle('active', b.textContent.toLowerCase() === tabName);
+      });
+      const practicePane = $('mod-' + modIdx + '-practice');
+      const conceptPane = $('mod-' + modIdx + '-concept');
+      if (practicePane) practicePane.style.display = tabName === 'practice' ? 'block' : 'none';
+      if (conceptPane) conceptPane.style.display = tabName === 'concept' ? 'block' : 'none';
+    }
+
+    // Corpus sample loader
     const samples = [
       "Prof. Anita Desai visited Microsoft in London on 2 June 2025 and earned €5000. The bat flew over the river bank at night. Sales grew 12% in Delhi! Contact: anita@oxford.ac.uk",
       "Elon Musk announced that Tesla will open a gigafactory in Mumbai, India with $200000000 investment. The agile team coded Python happily, while prices dropped 8% across stores.",
@@ -1298,17 +1133,28 @@
     // 1. Text Processing
     function tokenize() {
       const t = T(), sents = t.split(/(?<=[.!?])\s+(?=[A-Z])/), w = toks(t);
-      out(0, `<div style="margin-bottom:12px;font-size:14px;color:var(--primary);font-weight:700;">📊 Extracted ${w.length} tokens across ${sents.length} sentences</div>` +
-        `<div>${w.map(x => chip(x)).join('')}</div>` +
-        `<hr style="margin:14px 0;border:0;border-top:1px solid var(--border);">` +
-        `<b>Sentence Boundaries:</b>` +
-        `<div style="margin-top:6px;">${sents.map((s, i) => `<div style="padding:6px 0;border-bottom:1px dashed var(--border-light);font-size:13.5px;"><span style="color:var(--primary);font-weight:700;margin-right:8px;">${i + 1}.</span>${E(s)}</div>`).join('')}</div>`);
+      out(0,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${w.length}</span><span class="stat-lbl">Tokens</span></div>
+          <div class="stat-item"><span class="stat-val">${sents.length}</span><span class="stat-lbl">Sentences</span></div>
+        </div>` +
+        `<div class="chips-flow">${w.map(x => chip(x)).join('')}</div>` +
+        `<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px;">` +
+        `<div style="font-size:12px;font-weight:600;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Sentences</div>` +
+        sents.map((s, i) => `<div style="padding:4px 0;font-size:13px;"><span style="color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-right:8px;">${i + 1}.</span>${E(s)}</div>`).join('') +
+        `</div>`
+      );
     }
 
     function filt() {
       const t = T(), w = toks(t), k = w.filter(x => /^[A-Za-z]/.test(x)).map(x => x.toLowerCase());
-      out(0, `<div style="margin-bottom:10px;font-size:13.5px;"><b>Filtered Results:</b> Removed <span style="color:var(--danger);font-weight:700;">${w.length - k.length}</span> non-alphabetic/punctuation tokens; lower-cased the remaining words.</div>` +
-        `<div>${k.map(x => chip(x)).join('')}</div>`);
+      out(0,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${k.length}</span><span class="stat-lbl">Clean Words Kept</span></div>
+          <div class="stat-item"><span class="stat-val">${w.length - k.length}</span><span class="stat-lbl">Noise Dropped</span></div>
+        </div>` +
+        `<div class="chips-flow">${k.map(x => chip(x)).join('')}</div>`
+      );
     }
 
     function validate() {
@@ -1325,8 +1171,13 @@
         }
       }
       const ok = (cnt[s] || 0) === tot && tot > 0;
-      out(0, `<div style="margin-bottom:10px;font-size:14px;font-weight:700;color:${ok ? '#10B981' : '#EF4444'}">${ok ? '✅ Valid' : '❌ Not pure'} ${s} script document (${cnt[s] || 0}/${tot} letters)</div>` +
-        tbl(['Script Family', 'Letter Count / Coverage'], Object.entries(cnt).map(([a, b]) => ({ c: [a, b + ' (' + Math.round(b / tot * 100) + '%)'] }))));
+      out(0,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val" style="color:${ok ? 'var(--primary)' : 'var(--tag-2)'}">${ok ? 'Valid' : 'Mixed / Invalid'}</span><span class="stat-lbl">${s} script</span></div>
+          <div class="stat-item"><span class="stat-val">${cnt[s] || 0} / ${tot}</span><span class="stat-lbl">Matched Characters</span></div>
+        </div>` +
+        tbl(['Script Family', 'Coverage'], Object.entries(cnt).map(([a, b]) => ({ c: [a, `<span class="mono">${b} (${Math.round(b / tot * 100)}%)</span>`] })))
+      );
     }
 
     // 2. Stop Words, Stemming & Lemmatization
@@ -1367,20 +1218,36 @@
 
     function stops() {
       const w = words(T()), k = w.filter(x => !SW.has(x)), r = w.filter(x => SW.has(x));
-      out(1, `<div style="margin-bottom:12px;"><b>Content Tokens Kept (${k.length}):</b><br>${k.map(x => chip(x)).join('')}</div>` +
-        `<div style="margin-top:10px;"><b>Filter / Stop Words Removed (${r.length}):</b><br>${r.map(x => `<span class="chip" style="background:#FEE2E2;border-color:#FCA5A5;color:#991B1B">${E(x)}</span>`).join('')}</div>`);
+      out(1,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${k.length}</span><span class="stat-lbl">Retained Content Words</span></div>
+          <div class="stat-item"><span class="stat-val">${r.length}</span><span class="stat-lbl">Removed Stop Words</span></div>
+        </div>` +
+        `<div style="margin-bottom:8px;font-size:12px;font-weight:600;text-transform:uppercase;color:var(--text-muted);">Content tokens</div>` +
+        `<div class="chips-flow">${k.map(x => chip(x, null, 'tag-teal')).join('')}</div>` +
+        `<div style="margin-top:14px;margin-bottom:8px;font-size:12px;font-weight:600;text-transform:uppercase;color:var(--text-muted);">Filtered grammatical words</div>` +
+        `<div class="chips-flow">${r.map(x => chip(x, null, 'tag-terracotta')).join('')}</div>`
+      );
     }
 
     function stems() {
       const w = [...new Set(words(T()).filter(x => !SW.has(x)))];
-      out(1, `<div style="margin-bottom:8px;font-weight:700;color:var(--primary);">Heuristic Stemmed Forms (Porter Rules)</div>` +
-        tbl(['Original Token', 'Stemmed Root'], w.map(x => ({ c: [x, `<b style="color:var(--primary)">${stem(x)}</b>`] }))));
+      out(1,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${w.length}</span><span class="stat-lbl">Unique Terms Stemmed</span></div>
+        </div>` +
+        tbl(['Original Token', 'Porter Stem'], w.map(x => ({ c: [`<code>${x}</code>`, `<code>${stem(x)}</code>`] })))
+      );
     }
 
     function lemmas() {
       const w = [...new Set(words(T()).filter(x => !SW.has(x)))];
-      out(1, `<div style="margin-bottom:8px;font-weight:700;color:var(--primary);">Stemming vs True Dictionary Lemmatization Comparison</div>` +
-        tbl(['Original Word', 'Stem (Heuristic)', 'Lemma (Dictionary Base)'], w.map(x => ({ c: [x, stem(x), `<b style="color:#059669">${lem(x)}</b>`] }))));
+      out(1,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${w.length}</span><span class="stat-lbl">Unique Terms Evaluated</span></div>
+        </div>` +
+        tbl(['Original Word', 'Stem (Heuristic)', 'Lemma (Dictionary Root)'], w.map(x => ({ c: [`<code>${x}</code>`, `<code>${stem(x)}</code>`, `<code>${lem(x)}</code>`] })))
+      );
     }
 
     // 3. Bag of Words & N-Grams
@@ -1392,16 +1259,25 @@
 
     function bow() {
       const f = freq(words(T()));
-      out(2, `<div style="margin-bottom:8px;font-size:14px;"><b>Vocabulary Dimension:</b> <span style="color:var(--primary);font-weight:700;">${f.length} unique terms</span></div>` +
-        tbl(['Term / Word', 'Frequency Count'], f.map(([a, b]) => ({ c: [a, `<b style="color:var(--primary)">${b}</b>`] }))));
+      out(2,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${f.length}</span><span class="stat-lbl">Vocabulary Size</span></div>
+        </div>` +
+        tbl(['Term', 'Occurrences'], f.map(([a, b]) => ({ c: [`<code>${a}</code>`, `<span class="mono">${b}</span>`] })))
+      );
     }
 
     function ngram() {
       const n = +$('n').value, w = words(T()), g = [];
       for (let i = 0; i + n <= w.length; i++) g.push(w.slice(i, i + n).join(' '));
       const ranked = freq(g);
-      out(2, `<div style="margin-bottom:10px;font-size:14px;"><b>Generated ${g.length} contiguous ${n}-grams:</b></div>` +
-        ranked.map(([a, b]) => chip(a, b > 1 ? '×' + b : null)).join(''));
+      out(2,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${g.length}</span><span class="stat-lbl">Total ${n}-grams</span></div>
+          <div class="stat-item"><span class="stat-val">${ranked.length}</span><span class="stat-lbl">Unique Phrases</span></div>
+        </div>` +
+        `<div class="chips-flow">${ranked.map(([a, b]) => chip(a, b > 1 ? '×' + b : null, 'tag-slate')).join('')}</div>`
+      );
     }
 
     // 4. POS Tagging
@@ -1435,11 +1311,26 @@
 
     function pos() {
       const t = toks(T());
-      out(3, `<div style="margin-bottom:14px;line-height:2.2;">${t.map((w, i) => chip(w, tag(w, i, t))).join(' ')}</div>` +
-        `<div style="background:#FAF8FF;padding:12px;border-radius:8px;border:1px solid var(--purple-border);font-size:12px;color:var(--text-muted);line-height:1.6;">` +
-        `<b>Penn Treebank POS Reference:</b><br>` +
-        `<b>NN</b>: Noun · <b>NNS</b>: Plural Noun · <b>NNP</b>: Proper Noun · <b>VBZ</b>: Verb 3rd Person · <b>VBD</b>: Past Tense · <b>VBG</b>: Gerund/Present Participle · <b>JJ</b>: Adjective · <b>RB</b>: Adverb · <b>DT</b>: Determiner · <b>IN</b>: Preposition · <b>PRP</b>: Personal Pronoun · <b>CD</b>: Cardinal Number · <b>MD</b>: Modal` +
-        `</div>`);
+      const tagStyles = {
+        'NNP': 'tag-teal', 'NN': 'tag-teal', 'NNS': 'tag-teal',
+        'VB': 'tag-terracotta', 'VBD': 'tag-terracotta', 'VBG': 'tag-terracotta', 'VBZ': 'tag-terracotta', 'VBP': 'tag-terracotta',
+        'JJ': 'tag-olive',
+        'RB': 'tag-slate',
+        'DT': 'tag-plum', 'IN': 'tag-plum', 'PRP': 'tag-plum', 'CD': 'tag-olive'
+      };
+      out(3,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${t.length}</span><span class="stat-lbl">Tagged Tokens</span></div>
+        </div>` +
+        `<div class="chips-flow">${t.map((w, i) => {
+          const tg = tag(w, i, t);
+          const style = tagStyles[tg] || '';
+          return chip(w, tg, style);
+        }).join('')}</div>` +
+        `<div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);">` +
+        `NN: Noun · NNP: Proper Noun · VBZ: Verb 3rd Person · VBD: Verb Past · VBG: Gerund · JJ: Adjective · RB: Adverb · DT: Determiner · IN: Preposition · CD: Cardinal Number` +
+        `</div>`
+      );
     }
 
     // 5. NER
@@ -1472,29 +1363,52 @@
         else if (title || (!start && ws.length >= 1 && !/^(The|He|She|It|We|They|I)$/.test(s))) ents.push([s, ws.length > 0 && GPE.includes(ws[0]) ? 'GPE' : 'PERSON']);
         else if (start && ws.length > 1) ents.push([s, 'PERSON']);
       }
-      if (!ents.length) return out(4, '<p style="color:var(--text-muted)">No named entities detected in current text.</p>');
-      out(4, `<div style="margin-bottom:8px;font-weight:700;color:var(--primary);">Detected ${ents.length} Named Entities</div>` +
-        tbl(['Identified Text Span', 'Entity Category'], ents.map(([a, b]) => ({ c: [E(a), chip(b)] }))));
+      if (!ents.length) return out(4, '<p style="color:var(--text-muted);padding:8px 0;">No named entities found.</p>');
+
+      const nerTagMap = {
+        'PERSON': 'tag-teal',
+        'GPE': 'tag-terracotta',
+        'ORG': 'tag-slate',
+        'DATE': 'tag-olive',
+        'MONEY': 'tag-plum',
+        'PERCENT': 'tag-olive',
+        'EMAIL': 'tag-slate'
+      };
+
+      out(4,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${ents.length}</span><span class="stat-lbl">Entities Detected</span></div>
+        </div>` +
+        tbl(['Text Span', 'Entity Category'], ents.map(([a, b]) => ({ c: [`<code>${E(a)}</code>`, chip(b, null, nerTagMap[b] || '')] })))
+      );
     }
 
-    // 6. Word Cloud
+    // 6. Word Cloud & EDA
     function cloud() {
       const w = words(T()).filter(x => !SW.has(x) && x.length > 2),
         f = freq(w).slice(0, 45),
         mx = f[0] ? f[0][1] : 1,
-        col = ['#7C3AED', '#9333EA', '#6D28D9', '#8B5CF6', '#A855F7', '#5B21B6', '#4C1D95'];
+        // Forest & Cream restrained palette: forest, slate, terracotta, olive
+        col = ['#1F4D3A', '#2E6950', '#3E7C6B', '#5B6C9D', '#B5654A', '#8A7A3C', '#9A5B7E'];
       const u = new Set(w).size,
         sn = T().split(/[.!?]+/).filter(x => x.trim()).length;
 
-      out(5, `<div id="cloud">${f.sort(() => Math.random() - .5).map(([a, b]) => `<span title="Frequency: ${b}" style="font-size:${15 + 34 * b / mx}px;color:${col[Math.floor(Math.random() * col.length)]}">${E(a)}</span>`).join('')}</div>` +
-        tbl(['Corpus Metric', 'Calculated Value'], [
-          ['Total Informative Tokens (Stop words excluded)', w.length],
-          ['Unique Vocabulary Count', u],
-          ['Lexical Diversity (Type-Token Ratio)', (u / (w.length || 1)).toFixed(2)],
-          ['Sentence Count', sn],
-          ['Mean Word Length', (w.join('').length / (w.length || 1)).toFixed(1) + ' characters'],
-          ['Dominant Term', f[0] ? f[0][0] + ' (' + f[0][1] + ' occurrences)' : 'N/A']
-        ].map(c => ({ c }))));
+      out(5,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${w.length}</span><span class="stat-lbl">Informative Tokens</span></div>
+          <div class="stat-item"><span class="stat-val">${u}</span><span class="stat-lbl">Unique Vocab</span></div>
+          <div class="stat-item"><span class="stat-val">${(u / (w.length || 1)).toFixed(2)}</span><span class="stat-lbl">Lexical Diversity (TTR)</span></div>
+        </div>` +
+        `<div id="cloud">${f.sort(() => Math.random() - .5).map(([a, b]) => `<span title="${b} times" style="font-size:${15 + 32 * b / mx}px;color:${col[Math.floor(Math.random() * col.length)]}">${E(a)}</span>`).join('')}</div>` +
+        tbl(['Metric', 'Value'], [
+          ['Informative words count', w.length],
+          ['Unique vocabulary entries', u],
+          ['Lexical diversity ratio', (u / (w.length || 1)).toFixed(2)],
+          ['Sentence count', sn],
+          ['Mean word length', (w.join('').length / (w.length || 1)).toFixed(1) + ' characters'],
+          ['Most frequent term', f[0] ? `${f[0][0]} (${f[0][1]}×)` : 'None']
+        ].map(c => ({ c: [c[0], `<span class="mono">${c[1]}</span>`] })))
+      );
     }
 
     // 7. WordNet & Brown
@@ -1502,10 +1416,15 @@
 
     function wn(k) {
       const w = $('w').value.trim().toLowerCase(), e = WN.filter(x => x[0] == w);
-      if (!e.length) return out(6, `<p style="color:var(--text-muted)">"${E(w)}" is not in the mini lexical repository. Try words like: ${[...new Set(WN.map(x => x[0]))].map(x => chip(x)).join('')}</p>`);
+      if (!e.length) return out(6, `<p style="color:var(--text-muted);padding:8px 0;">"${E(w)}" not in dictionary. Try: ${[...new Set(WN.map(x => x[0]))].map(x => chip(x)).join('')}</p>`);
       const L = [...new Set(e.flatMap(x => x[k == 'syn' ? 2 : 3].split(',')).filter(Boolean))];
-      out(6, `<div style="margin-bottom:8px;font-size:14px;"><b>WordNet Synset for "${E(w)}"</b> (${e[0][1]}) — <i style="color:var(--text-muted);">${E(e[0][4])}</i></div>` +
-        `<div style="margin-top:6px;"><b>${k == 'syn' ? '✨ Synonyms' : '↔️ Antonyms'}:</b><br>${L.length ? L.map(x => chip(x)).join('') : 'None found in repository.'}</div>`);
+      out(6,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${E(w)}</span><span class="stat-lbl">${e[0][1]} · ${E(e[0][4])}</span></div>
+        </div>` +
+        `<div style="font-size:12px;font-weight:600;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">${k == 'syn' ? 'Synonyms' : 'Antonyms'}</div>` +
+        `<div class="chips-flow">${L.length ? L.map(x => chip(x, null, k == 'syn' ? 'tag-teal' : 'tag-terracotta')).join('') : '<span style="color:var(--text-muted);">None registered.</span>'}</div>`
+      );
     }
 
     const BR = {
@@ -1520,10 +1439,13 @@
         all = words(Object.values(BR).join(' ')),
         f = freq(all.filter(x => !SW.has(x))).slice(0, 10);
       const conc = Object.entries(BR).flatMap(([c, t]) => t.split(/(?<=\.)\s/).filter(s => words(s).includes(w)).map(s => [c, s]));
-      out(6, `<div style="margin-bottom:8px;"><b>Brown Corpus Genres:</b> ${Object.keys(BR).map(c => chip(c, words(BR[c]).length + ' words')).join('')}</div>` +
-        `<div style="font-size:13.5px;margin-bottom:12px;">Corpus vocabulary size: <b>${all.length} words</b> · Keyword <b>"${E(w)}"</b> frequency: <span style="color:var(--primary);font-weight:700;">${all.filter(x => x == w).length}×</span></div>` +
-        `<b>Concordance Lines (KWIC):</b>` +
-        (conc.length ? tbl(['Genre / Category', 'Matched Sentence in Context'], conc.map(c => ({ c: [`<b>${c[0]}</b>`, E(c[1])] }))) : '<p style="color:var(--text-muted);margin-top:6px;">No sentence matches found for this word. Try: "good", "river", "cold", "money".</p>'));
+      out(6,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${all.length}</span><span class="stat-lbl">Corpus words</span></div>
+          <div class="stat-item"><span class="stat-val">${all.filter(x => x == w).length}</span><span class="stat-lbl">Matches for "${E(w)}"</span></div>
+        </div>` +
+        (conc.length ? tbl(['Genre', 'Concordance Line (KWIC)'], conc.map(c => ({ c: [`<code>${c[0]}</code>`, E(c[1])] }))) : '<p style="color:var(--text-muted);padding:8px 0;">No sentence matches for this word. Try: "good", "river", "cold", "money".</p>')
+      );
     }
 
     // 8. Lesk WSD
@@ -1579,24 +1501,26 @@
       const mx = Math.max(...sc.map(s => s.o.length));
       const b = sc.findIndex(s => s.o.length == mx);
 
-      out(7, `<div style="margin-bottom:8px;font-size:14px;"><b>Target Ambiguous Term:</b> <span style="color:var(--primary);font-weight:700;">"${w}"</span></div>` +
-        tbl(['Sense Definition', 'WordNet Concept Gloss', 'Context Overlap Words', 'Score'],
+      out(7,
+        `<div class="stats-summary">
+          <div class="stat-item"><span class="stat-val">${w}</span><span class="stat-lbl">Ambiguous word</span></div>
+          <div class="stat-item"><span class="stat-val" style="color:var(--primary)">${mx > 0 ? sc[b].n : 'Ambiguous'}</span><span class="stat-lbl">Predicted Sense</span></div>
+        </div>` +
+        tbl(['Sense Name', 'Gloss Definition', 'Overlap Tokens', 'Score'],
           sc.map((s, i) => ({
             cls: i == b && mx > 0 ? 'best' : '',
             c: [
-              s.n + (i == b && mx > 0 ? ' ✅ (Winner)' : ''),
+              s.n + (i == b && mx > 0 ? ' (winner)' : ''),
               E(s.g),
-              s.o.length ? s.o.map(x => chip(x)).join(' ') : '—',
-              `<b style="color:${i == b && mx > 0 ? 'var(--primary)' : 'var(--text-muted)'}">${s.o.length}</b>`
+              s.o.length ? s.o.map(x => chip(x, null, 'tag-teal')).join('') : '—',
+              `<span class="mono">${s.o.length}</span>`
             ]
           }))
-        ) +
-        `<div style="margin-top:14px;padding:12px;background:#FAF8FF;border-radius:8px;border:1px solid var(--purple-border);">` +
-        `<b>Disambiguation Conclusion:</b> ${mx > 0 ? `The algorithm determines that <i>"${w}"</i> refers to <b>${sc[b].n}</b> with an overlap score of ${mx}.` : 'No overlapping lexical tokens found with context. Try adding more context keywords into the sentence.'}` +
-        `</div>`);
+        )
+      );
     }
 
-    // Auto-initialize section 0 on load
+    // Default initialization
     window.addEventListener('DOMContentLoaded', () => {
       tokenize();
     });
